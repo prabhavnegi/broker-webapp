@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, {useState,useEffect} from "react";
 import { Link } from "react-router-dom";
 import { signInWithGoogle } from "../firebase";
-import { auth } from "../firebase";
+import { auth,firebase } from "../firebase";
 import { useHistory } from "react-router";
 
 
@@ -10,13 +10,20 @@ const SignIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+    const [flag,setFlag] = useState(false)
     const history=useHistory();
 
-    auth.onAuthStateChanged(user => {
-      if(user)
-        history.push("/")
-    })
-
+    
+    
+    useEffect(() => {
+      auth.onAuthStateChanged(user => {
+        if(!user){
+        setFlag(true)
+        }
+        else
+          history.push("/")
+      })
+    }, [])
     const signInWithEmailAndPasswordHandler = (event,email, password) => {
         event.preventDefault();
         auth.signInWithEmailAndPassword(email, password).then(()=>{
@@ -39,6 +46,7 @@ const SignIn = () => {
    
 
   return (
+    !flag?"":
     <div className="mt-8">
       <h1 className="text-3xl mb-2 text-center font-bold">Sign In</h1>
       <div className="border border-blue-400 mx-auto w-11/12 md:w-2/4 rounded py-8 px-4 md:px-8">

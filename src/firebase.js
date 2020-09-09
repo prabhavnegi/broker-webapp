@@ -51,10 +51,9 @@ export const deleteUser = () => {
 
 
 //generating user document
-export const generateUserDocument = async(displayName, additionalData) => {
+export const generateUserDocument = async(displayName) => {
     var user = auth.currentUser;
     if (!user) return;
-
     const userRef = firestore.doc(`users/${user.uid}`);
     const snapshot = await userRef.get();
 
@@ -62,13 +61,12 @@ export const generateUserDocument = async(displayName, additionalData) => {
         const { email } = user;
         try {
             await userRef.set({
-                displayName,
                 email,
                 cat: firebase.firestore.Timestamp.now(),
-                ...additionalData
+                displayName: displayName
             });
         } catch (error) {
-            console.error("Error creating user document", error);
+            console.error("Error lol", error.message);
         }
     }
     return getUserDocument(user.uid);
@@ -130,12 +128,50 @@ const updatePropDocument = async(uid, name, url) => {
     }
 };
 
-export const updateProfile = async(NewEmail, displayName, password, Npassword) => {
+export const updatePassword = async(password, Npassword) => {
     var user = auth.currentUser
-    console.log(password)
-    user.reauthenticateWithCredential(password).then(function() {
-        console.log("done hai")
-    }).catch(function(error) {
+    const credentials = firebase.auth.EmailAuthProvider.credential(user.email, password)
+    if (Npassword) {
+        try {
+            await user.reauthenticateWithCredential(credentials)
+            await user.updatePassword(Npassword)
+        } catch (error) {
+            throw error.message
+        }
+    }
+}
+
+export const updateUserInfo = async(displayName) => {
+    var user = auth.currentUser
+    const userRef = firestore.doc(`users/${user.uid}`);
+    const snapshot = await userRef.get()
+    if (snapshot.data().displayName === displayName)
+        throw "Inputs cannot be same"
+    else
+        try {
+            await userRef.update({
+                displayName: displayName
+            })
+        }
+    catch (err) {
+        console.log(err.message)
+    }
+}
+
+
+export const updateProfile = async file => {
+    var user = auth.currentUser
+    const userRef = firestore.doc(`users/${user.uid}`);
+    try {
+        await storage.ref(`${user.uid}/ProfileImage/${file.name}`).put(file)
+        const photo_url = await storage
+            .ref(`${user.uid}/ProfileImage/`)
+            .child(file.name)
+            .getDownloadURL()
+            .then(url => { return url });
+        await userRef.update({ photo_url: photo_url })
+    } catch (error) {
         console.log(error)
-    });
+    }
+
 }

@@ -1,18 +1,34 @@
-import React, { useState } from "react";
+import React, { useState,useEffect} from "react";
+import {useHistory} from "react-router";
 import { Link } from "react-router-dom";
 import { auth, signInWithGoogle, generateUserDocument, emailVerify } from "../firebase";
 
 const SignUp = () => {
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState(null);
+  const [flag,setFlag] = useState(true)
 
-  const createUserWithEmailAndPasswordHandler = async (event, email, password) => {
+  let history = useHistory();
+
+  useEffect(() => {
+    auth.onAuthStateChanged(user => {
+      if(!user){
+      setFlag(true)
+      }
+      else
+        history.push("/")
+    })
+  }, [])
+    
+
+  const createUserWithEmailAndPasswordHandler = async (event, email, password,displayName) => {
     event.preventDefault();
     try{
       const {user} = await auth.createUserWithEmailAndPassword(email, password);
-      generateUserDocument(displayName);
+      generateUserDocument(displayName)
       emailVerify(user);
     }
     catch(error){
@@ -37,6 +53,7 @@ const SignUp = () => {
   };
 
   return (
+    flag?"":
     <div className="mt-8">
       <h1 className="text-3xl mb-2 text-center font-bold">Sign Up</h1>
       <div className="border border-blue-400 mx-auto w-11/12 md:w-2/4 rounded py-8 px-4 md:px-8">
@@ -85,7 +102,7 @@ const SignUp = () => {
           <button
             className="bg-green-400 hover:bg-green-500 w-full py-2 text-white"
             onClick={event => {
-              createUserWithEmailAndPasswordHandler(event, email, password);
+              createUserWithEmailAndPasswordHandler(event, email, password,displayName);
             }}
           >
             Sign up
