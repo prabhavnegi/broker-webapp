@@ -1,0 +1,47 @@
+import React, {useState,useEffect}from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import SignIn from "./Components/SignIn";
+import SignUp from "./Components/SignUp";
+import ProfilePage from "./Components/ProfilePage";
+import PasswordReset from "./Components/PasswordReset";
+import EditProfile from "./Components/EditProfile"
+import Upload from "./Components/Upload";
+import AuthRoute from "./auth"
+import {auth} from "./firebase"
+function App() {
+  const [loading, setLoading] = useState(true);
+  const [flag, setFlag] = useState(false);
+  useEffect(()=>{
+    auth.onAuthStateChanged(user=>{
+      if(user)
+        setFlag(true) 
+      else
+        setFlag(false)
+
+    setLoading(false)
+    })
+  
+  },[])
+  return (
+    
+        <Router>
+          <div className='broker'>
+            <Switch>
+              <Route path="/signIn" exact component={SignIn}/>
+              <Route path="/signUp" exact component={SignUp}/>
+              <Route path="/passwordReset" exact component={PasswordReset}/>
+              <AuthRoute path="/" exact component={ProfilePage}/>
+              <Route path="/Upload" exact component={Upload}/>'
+              <Route path="/Upload/:id" component={Upload}/>
+              
+              <Route path="/EditProfile" render={props=>{
+                return loading?"":flag?<EditProfile {...props}/> : <SignIn/>
+              }}/>
+            </Switch>
+          </div>
+        </Router>
+      
+  );
+}
+
+export default App;
