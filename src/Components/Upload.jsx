@@ -6,7 +6,7 @@ import {useHistory} from "react-router";
 const Upload= (props) => {
  
   const [progress,setProgress] = useState(0);
-  const [property,setProperty] = useState("");
+  const [property,setProperty] = useState();
   const [url,setUrl]= useState("");
   const [addr,setAddr]=useState("");
   const [uid,setUid]=useState("");

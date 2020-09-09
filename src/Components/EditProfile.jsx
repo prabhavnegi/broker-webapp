@@ -2,7 +2,7 @@ import React ,{useEffect,useState}from "react"
 import {generateUserDocument,updatePassword, updateUserInfo, updateProfile} from "../firebase"
 import { useHistory } from "react-router";
 const EditProfile = () => {
-    const [displayName, setDp] = useState("");
+    const [displayName, setDp] = useState();
     const [Email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [Npassword, setNewPassword] = useState("");
