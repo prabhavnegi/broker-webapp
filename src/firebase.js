@@ -173,5 +173,52 @@ export const updateProfile = async file => {
     } catch (error) {
         console.log(error)
     }
+}
 
+export const generateClients = async(name,phoneno) => {
+    var user=auth.currentUser;
+    if (!user) return;
+console.log("hello")
+    const userRef = db.collection('users').doc(user.uid).collection('clients').doc(user.uid+"clients");
+    const snapshot = await userRef.get();
+    if (!snapshot.exists) {
+        try {
+            await userRef.set({
+                clients:{
+                    name,
+                    phoneno
+                }
+            });
+        } catch (error) {
+            console.error("Error creating client document", error);
+        }
+    }
+    return userRef.update({
+        clients: firebase.firestore.FieldValue.arrayUnion({"name":name,"phoneno":phoneno})
+        })
+        .then(function() {
+            console.log("Document successfully updated!");
+        })
+        .catch(function(error) {
+            console.error("Error updating client document: ", error);
+        });
+};
+
+export const searchByname=async ()=>{
+    var user=auth.currentUser;
+    if (!user) return;
+    const userRef = db.collection('users').doc(user.uid).collection('clients').doc(user.uid+"clients");
+    const snapshot = await userRef.get();
+    if (snapshot.exists) {
+        try {
+                snapshot.data().clients.forEach(index => {
+                    console.log(index.name)
+                })
+        } catch (error) {
+            console.error("Error creating client document", error);
+        }
+    }
+    else
+    alert("no clients")
+    
 }

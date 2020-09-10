@@ -71,7 +71,8 @@ const showImage = name => {
       <button className = "w-full py-3 bg-red-600 mt-4 text-white" onClick = {() => {delUser()}}>Delete Account</button>
       <Link to="/EditProfile"><button className = "w-full py-3 bg-red-600 mt-4 text-white">Edit Profile</button></Link>
       <Link to={{pathname:"/Upload", state:{uid:[user.uid]}}}><button className = "w-full py-3 bg-red-600 mt-4 text-white">Upload</button></Link>
-      <Link to=""><button className = "w-full py-3 bg-red-600 mt-4 text-white">Client Page</button></Link>
+      <Link to={{pathname:"/Clients"}}><button className = "w-full py-3 bg-red-600 mt-4 text-white">Client Page</button></Link>
+      <Link to={{pathname:"/Search"}}><button className = "w-full py-3 bg-red-600 mt-4 text-white">Search</button></Link>
       <br></br>
       {
         docs.map(p =>(  

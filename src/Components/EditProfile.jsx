@@ -125,7 +125,7 @@ const EditProfile = () => {
                     </label>
                     <input type="text" className="my-1 p-1 w-full " name="displayName" id="displayName"
                         value={displayName} onChange={event => onChangeHandler(event)} />
-                    <button type="button" className=" bg--400 hover:bg-cyan-500 w-full py-2 text-white" onClick={()=>{updateFlag()}}>Change Password</button>
+                    <button type="button" className=" bg--400 hover:bg-blue-500 w-full py-2 text-white" onClick={()=>{updateFlag()}}>Change Password</button>
                     {flag && <div>
                         <label htmlFor="CurrentPassword" className="block"> Current Password:</label>
                         <input type="password" className="mt-1 mb-3 p-1 w-full" name="userPassword" value={password} id="userPassword"

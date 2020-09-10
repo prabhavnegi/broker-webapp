@@ -7,6 +7,8 @@ import PasswordReset from "./Components/PasswordReset";
 import EditProfile from "./Components/EditProfile"
 import Upload from "./Components/Upload";
 import AuthRoute from "./auth"
+import AddClient from "./Components/AddClient";
+import SearchClient from "./Components/SearchClient"; 
 import Hiya from "./Components/hiya"
 import {auth} from "./firebase"
 function App() {
@@ -38,6 +40,8 @@ function App() {
               <Route path="/EditProfile" render={props=>{
                 return loading?"":flag?<EditProfile {...props}/> : <SignIn/>
               }}/>
+              <Route path="/Clients" component={AddClient}/>
+              <Route path="/Search" component={SearchClient}/>
             </Switch>
           </div>
         </Router>
