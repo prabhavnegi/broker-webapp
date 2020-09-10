@@ -204,21 +204,3 @@ console.log("hello")
         });
 };
 
-export const searchByname=async ()=>{
-    var user=auth.currentUser;
-    if (!user) return;
-    const userRef = db.collection('users').doc(user.uid).collection('clients').doc(user.uid+"clients");
-    const snapshot = await userRef.get();
-    if (snapshot.exists) {
-        try {
-                snapshot.data().clients.forEach(index => {
-                    console.log(index.name)
-                })
-        } catch (error) {
-            console.error("Error creating client document", error);
-        }
-    }
-    else
-    alert("no clients")
-    
-}
