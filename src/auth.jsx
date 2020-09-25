@@ -1,7 +1,7 @@
 import React from "react"
 import {useEffect,useState} from "react";
 import {useHistory} from "react-router";
-import {auth} from "../src/firebase";
+import {auth,getUserDocument} from "../src/firebase";
 import {Route} from "react-router-dom";
 
  const AuthRoute = ({ component: Component, ...rest }) => {
@@ -10,9 +10,13 @@ import {Route} from "react-router-dom";
     const [loadingAuth, setLoadingAuth] = useState(true)
 
     useEffect(() => {
-      auth.onAuthStateChanged((user) => {
+      auth.onAuthStateChanged(async user => {
         if (user) {
-          setLogin(true)
+          const userDoc = await getUserDocument(user)
+          if(userDoc)
+            setLogin(true)
+          else
+            setLogin(false)
         } else {
           setLogin(false)
         }

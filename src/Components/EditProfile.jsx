@@ -1,6 +1,7 @@
 import React ,{useEffect,useState}from "react"
-import {generateUserDocument,updatePassword, updateUserInfo, updateProfile} from "../firebase"
+import {auth,generateUserDocument,updatePassword, updateUserInfo, updateProfile} from "../firebase";
 import { useHistory } from "react-router";
+
 const EditProfile = () => {
     const [displayName, setDp] = useState();
     const [Email, setEmail] = useState("");
@@ -16,10 +17,11 @@ const EditProfile = () => {
 
 
     const getUser = async () => {
-        const user = await generateUserDocument()
-        setDp(user.displayName)
-        setEmail(user.email)
-        setProfilePic(user.photo_url)
+        const user = auth.currentUser
+        const userDoc = await generateUserDocument(user,{},"edit")
+        setDp(userDoc.displayName)
+        setEmail(userDoc.email)
+        setProfilePic(userDoc.photo_url)
         setLoading(true)
     }
     useEffect(() => {
@@ -96,10 +98,10 @@ const EditProfile = () => {
         <div 
           style={{
             background: `url(${profilePic || 'https://res.cloudinary.com/dqcsk8rsc/image/upload/v1577268053/avatar-1-bitmoji_upgwhc.png'})`,
-            backgroundSize: "cover",
             height: "200px",
             width: "200px",
-            margin:"auto"
+            margin:"auto",
+            backgroundSize:"100%"
           }}
           className="border border-blue-300" 
         > <input style={{ cursor:"pointer",opacity:"0",height: "200px", width: "200px",}} type="file" title="Upload Photo" multiple onChange={handleUpload}/>
@@ -125,7 +127,7 @@ const EditProfile = () => {
                     </label>
                     <input type="text" className="my-1 p-1 w-full " name="displayName" id="displayName"
                         value={displayName} onChange={event => onChangeHandler(event)} />
-                    <button type="button" className=" bg--400 hover:bg-blue-500 w-full py-2 text-white" onClick={()=>{updateFlag()}}>Change Password</button>
+                    <button type="button" className=" bg-blue-400 hover:bg-blue-500 w-full py-2 text-white" onClick={()=>{updateFlag()}}>Change Password</button>
                     {flag && <div>
                         <label htmlFor="CurrentPassword" className="block"> Current Password:</label>
                         <input type="password" className="mt-1 mb-3 p-1 w-full" name="userPassword" value={password} id="userPassword"

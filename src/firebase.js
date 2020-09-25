@@ -26,7 +26,11 @@ const db = firebase.firestore(app);
 export const FieldValue = firebase.firestore.FieldValue;
 //signin with google
 export const signInWithGoogle = () => {
-    auth.signInWithPopup(provider);
+    auth.signInWithPopup(provider).then(async (result)=> {
+        var user = result.user
+        await generateUserDocument(user.displayName)
+    });
+
 };
 
 //email verification
@@ -51,29 +55,40 @@ export const deleteUser = () => {
 
 
 //generating user document
-export const generateUserDocument = async(displayName) => {
-    var user = auth.currentUser;
+export const generateUserDocument = async(user,name,phno) => {
     if (!user) return;
     const userRef = firestore.doc(`users/${user.uid}`);
     const snapshot = await userRef.get();
-
+    var displayName=""
     if (!snapshot.exists) {
-        const { email } = user;
-        try {
-            await userRef.set({
-                email,
-                cat: firebase.firestore.Timestamp.now(),
-                displayName: displayName
-            });
-        } catch (error) {
-            console.error("Error lol", error.message);
+        const { email,photoURL} = user
+        if(name){
+            console.log("set")
+            var displayName=name
         }
+        else
+            var {displayName}=user;
+        if(displayName)
+        {
+            console.log("doc")
+            try {
+            await userRef.set({
+                displayName,
+                email,
+                photoURL,
+                cat: firebase.firestore.Timestamp.now(),
+                phno
+            });
+            } catch (error) {
+            console.error("Error lol", error.message);
+            }
+        }   
     }
     return getUserDocument(user.uid);
 };
 
 //displaying user document
-const getUserDocument = async uid => {
+export const getUserDocument = async uid => {
     if (!uid) return null;
     try {
         const userDocument = await firestore.doc(`users/${uid}`).get();
@@ -172,6 +187,23 @@ export const updateProfile = async file => {
         await userRef.update({ photo_url: photo_url })
     } catch (error) {
         console.log(error)
+    }
+}
+
+export const updatePropInfo = async(addr,id) => {
+    var user = auth.currentUser
+    const userRef = firestore.collection('users').doc(`${user.uid}`).collection('property_details').doc(id);
+    const snapshot = await userRef.get()
+    if (snapshot.data().address === addr)
+        console.error("Inputs cannot be same");
+    else
+        try {
+            await userRef.update({
+                address: addr
+            })
+        }
+    catch (err) {
+        console.log(err.message)
     }
 }
 

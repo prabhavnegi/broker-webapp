@@ -1,7 +1,7 @@
 import React, {useState,useEffect} from "react";
 import { Link } from "react-router-dom";
 import { signInWithGoogle } from "../firebase";
-import { auth,firebase } from "../firebase";
+import { auth} from "../firebase";
 import { useHistory } from "react-router";
 
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState} from "react";
-import {Link} from "react-router-dom"
-import {storage, deleteUser} from '../firebase';
-import {auth,firestore,FieldValue,generateUserDocument} from "../firebase";
+import {Link} from "react-router-dom";
+import {auth,firestore,FieldValue,getUserDocument,storage, deleteUser} from "../firebase";
 import AliceCarousel from 'react-alice-carousel';
 import "react-alice-carousel/lib/alice-carousel.css"
 
@@ -12,14 +11,17 @@ const ProfilePage =  () => {
 const [user,setUser] = useState({})
 const [docs,setDocs] = useState([])
 const [hidden,setHidden] = useState({})
+const [flag,setFlag]=useState(false)
+const selectedProp= new Set()
 
 useEffect( () => {
   getUser()
   },[]) 
 
 const getUser =  async () => {
-  const user = await generateUserDocument()
-  setUser(user)
+  const user = auth.currentUser
+   const userDoc=await getUserDocument(user.uid)
+  setUser(userDoc)
   const userRef = firestore.collection('users');
   const properties =  await userRef.doc(`${user.uid}`).collection('property_details').get()
   properties.docs.forEach(p => {
@@ -39,16 +41,34 @@ const delUser = () => {
   });
 }
 
-const deletePhoto=async(image,pname)=> {
-  const userRef = await firestore.collection('users').doc(user.uid).collection('property_details').doc(pname);
-  userRef.update({URL:FieldValue.arrayRemove(image)});
-  console.log("image deleted")
-  storage.ref().child(user.uid).child(image).delete()
-  console.log("storage")
-}
 const showImage = name => {
   setHidden({[name]:!hidden[name]})
 }
+
+const checkboxChange=(val)=>{
+    if(selectedProp.has(val)){
+      selectedProp.delete(val);
+      console.log("remove")
+    }
+    else{
+      selectedProp.add(val);
+      console.log("add")
+    }
+  console.log(selectedProp)
+  setFlag(true);
+}
+
+const setProp=()=>{
+
+}
+
+const delProp=(name)=>{
+  var user=auth.currentUser
+  firestore.collection('users').doc(user.uid).collection('property_details').doc(name).delete()
+  .then(()=> console.log("Property deleted"))
+  .catch(()=> console.log("error deleting property"))
+}
+
 
   return (
     <div className = "mx-auto w-11/12 md:w-2/4 py-8 px-4 md:px-8">
@@ -56,9 +76,10 @@ const showImage = name => {
         <div
           style={{
             background: `url(${user.photo_url || 'https://res.cloudinary.com/dqcsk8rsc/image/upload/v1577268053/avatar-1-bitmoji_upgwhc.png'})  no-repeat center center`,
-            backgroundSize: "cover",
+            backgroundSize: "100%",
             height: "200px",
-            width: "200px"
+            width: "200px",
+            margin:"auto"
           }}
           className="border border-blue-300"
         ></div>
@@ -72,29 +93,38 @@ const showImage = name => {
       <Link to="/EditProfile"><button className = "w-full py-3 bg-red-600 mt-4 text-white">Edit Profile</button></Link>
       <Link to={{pathname:"/Upload", state:{uid:[user.uid]}}}><button className = "w-full py-3 bg-red-600 mt-4 text-white">Upload</button></Link>
       <Link to={{pathname:"/Clients"}}><button className = "w-full py-3 bg-red-600 mt-4 text-white">Client Page</button></Link>
-      <Link to={{pathname:"/Search"}}><button className = "w-full py-3 bg-red-600 mt-4 text-white">Search</button></Link>
       <br></br>
       {
         docs.map(p =>(  
 
           <div key={p.name}>
-              <h2 className = "text-2xl font-semibold"> {p.name} </h2>
-              
-              <button onClick={()=> showImage(p.name)}> Show Images </button>
+              <input type="checkbox" name="prop" value={p.name} onChange={(e)=>checkboxChange(e.target.value)}/><label>Property Name: {p.name}</label>  
               <h2>{p.address}</h2>
+              <button onClick={()=> showImage(p.name)}><h3>Show Images</h3></button>
+              
 
              { hidden[p.name] && <AliceCarousel autoPlay autoPlayInterval={3000}>
-              {p.URL.map((url,i) =>(
+              {p.URL.length >1 ? p.URL.map((url,i) =>(
                   <div key={i}>
                     <img key={url}src={url} alt=""/>
-                    <button onClick={() => {deletePhoto(url,p.name)}}>remove</button>
                     <Link to={{pathname:`/Upload/${p.name}`, state:{uid:[user.uid]}}}><button>Add Image</button></Link>
                   </div>
-                ))} 
+                ))   :
+                <div>
+                  {console.log("hello")}
+                  <img src={p.URL[0]} alt={p.URL[0]}/>
+                  <Link to={{pathname:`/Upload/${p.name}`, state:{uid:[user.uid]}}}><button>Add Image</button></Link>
+                </div> 
+              } 
               </AliceCarousel> }
+              <br/>
+              <button onClick={()=>{delProp(p.name)}}>Delete Property</button><br/>
+              <Link to={{pathname:`/EditProp/${p.name}`, state:{uid:[user.uid]}}}><button>Edit Property</button></Link>
           </div>
         ))
       }
+      {flag?<button className = "w-full py-3 bg-green-600 mt-4 text-white" onClick={()=> {setProp()}}>Select</button>:""}
+
 
 
     </div>

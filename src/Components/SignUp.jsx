@@ -7,6 +7,7 @@ const SignUp = () => {
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phno, setPhno]=useState("")
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState(null);
   const [flag,setFlag] = useState(true)
@@ -22,13 +23,12 @@ const SignUp = () => {
         history.push("/")
     })
   }, [])
-    
 
-  const createUserWithEmailAndPasswordHandler = async (event, email, password,displayName) => {
+  const createUserWithEmailAndPasswordHandler = async (event, email, password) => {
     event.preventDefault();
     try{
       const {user} = await auth.createUserWithEmailAndPassword(email, password);
-      generateUserDocument(displayName)
+      generateUserDocument(user,displayName,phno)
       emailVerify(user);
     }
     catch(error){
@@ -49,11 +49,13 @@ const SignUp = () => {
       setPassword(value);
     } else if (name === "displayName") {
       setDisplayName(value);
+    } else if (name === "userPhno") {
+      setPhno(value);
     }
   };
 
   return (
-    flag?"":
+    !flag?"":
     <div className="mt-8">
       <h1 className="text-3xl mb-2 text-center font-bold">Sign Up</h1>
       <div className="border border-blue-400 mx-auto w-11/12 md:w-2/4 rounded py-8 px-4 md:px-8">
@@ -83,8 +85,20 @@ const SignUp = () => {
             className="my-1 p-1 w-full"
             name="userEmail"
             value={email}
-            placeholder="E.g: faruq123@gmail.com"
+            placeholder="E.g: xyz@gmail.com"
             id="userEmail"
+            onChange={event => onChangeHandler(event)}
+          />
+          <label htmlFor="userEmail" className="block">
+            Phone No. :
+          </label>
+          <input
+            type="text"
+            className="my-1 p-1 w-full"
+            name="userPhno"
+            value={phno}
+            placeholder="E.g: 987654321"
+            id="userPhno"
             onChange={event => onChangeHandler(event)}
           />
           <label htmlFor="userPassword" className="block">
@@ -102,7 +116,7 @@ const SignUp = () => {
           <button
             className="bg-green-400 hover:bg-green-500 w-full py-2 text-white"
             onClick={event => {
-              createUserWithEmailAndPasswordHandler(event, email, password,displayName);
+              createUserWithEmailAndPasswordHandler(event, email, password);
             }}
           >
             Sign up

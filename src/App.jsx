@@ -6,17 +6,18 @@ import ProfilePage from "./Components/ProfilePage";
 import PasswordReset from "./Components/PasswordReset";
 import EditProfile from "./Components/EditProfile"
 import Upload from "./Components/Upload";
+import EditProp from "./Components/EditProp";
 import AuthRoute from "./auth"
 import AddClient from "./Components/AddClient"; 
 import Hiya from "./Components/hiya";
-import {auth} from "./firebase"
+import {auth,getUserDocument} from "./firebase"
 function App() {
   const [loading, setLoading] = useState(true);
   const [flag, setFlag] = useState(false);
   useEffect(()=>{
-    auth.onAuthStateChanged(user=>{
+    auth.onAuthStateChanged( async user=>{
       if(user)
-        setFlag(true) 
+       setFlag(true);
       else
         setFlag(false)
 
@@ -34,8 +35,9 @@ function App() {
               <Route path="/passwordReset" exact component={PasswordReset}/>
               <AuthRoute path="/" exact component={ProfilePage}/>
               {/*<Route path="/doom" exact component={Hiya}/>*/}
-              <Route path="/Upload" exact component={Upload}/>'
+              <Route path="/Upload" exact component={Upload}/>
               <Route path="/Upload/:id" component={Upload}/>
+              <Route path="/EditProp/:id" component={EditProp}/>
               <Route path="/EditProfile" render={props=>{
                 return loading?"":flag?<EditProfile {...props}/> : <SignIn/>
               }}/>
