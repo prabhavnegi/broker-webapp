@@ -1,14 +1,17 @@
 import React,{useState} from 'react';
-import {generateClients,auth,firestore} from '../firebase';
+import {generateClients,auth,firestore,FieldValue} from '../firebase';
+import { useHistory } from 'react-router';
 
 const AddClient=(props) => {
     const [name,newname]=useState('');
     const [phoneno,newphoneno]=useState('');
     const [data,setData]= useState();
-    const [flag,setFlag]= useState();
+    const [flag,setFlag]= useState(false);
     const [filter,setFilter]=useState("");
     const [val,setVal]=useState({});
     const [search,setSearch]=useState();
+    const selected=new Set();
+    const history=useHistory();
 
     const submitter= async ()=>{
         console.log("adding")
@@ -20,8 +23,14 @@ const AddClient=(props) => {
       const user = auth.currentUser;
       const userRef = firestore.collection('users');
       const client=await userRef.doc(user.uid).collection('clients').doc(user.uid+"clients").get()
-      setData(client.data())
-      setFlag(true)
+      if(client.data())
+      {
+        setData(client.data())
+        setFlag(true)
+      }
+      else
+        alert("No clients")
+      
     }
     
     const changeHandler=(e) =>{
@@ -35,7 +44,7 @@ const AddClient=(props) => {
         if(!filter) {console.log("empty");return;}
         if(filter==="Name")
         {
-            data.clients.map(client => {
+            data.clients.forEach(client => {
                 if(client.name===search)
                 {
                   console.log(client)
@@ -47,7 +56,7 @@ const AddClient=(props) => {
         }
         else
         {
-            data.clients.map(client => {
+            data.clients.forEach(client => {
               if(client.phoneno===search)
              {
                 console.log(client)
@@ -57,10 +66,39 @@ const AddClient=(props) => {
           })
         }
     }
+
+    const delClient=async(n)=>{
+      var user=auth.currentUser
+      const userRef = firestore.collection('users').doc(user.uid).collection('clients').doc(user.uid+"clients");
+      let i;
+      data.clients.forEach((client,index) => {
+        if(n===client.name)
+          i=index
+      })
+      data.clients.splice(i,1);
+    await  userRef.update({
+        clients:data.clients
+      })
+      getClients()
+    }
+
+    const checkboxChange=(val)=>{
+      if(selected.has(val))
+        selected.delete(val);
+      else
+        selected.add(val);
+    }
+    
+    const setClients=()=>{
+      selected.forEach(client => {
+        console.log(client)
+      })
+    }
+
     return (
       <div>
         <div>
-          <p>Hello</p>
+        <button type="button" className="bg-orange-400 hover:bg-orange-500 w-full py-2 text-white" onClick={()=>history.push("/")}>Profile Page</button>
           <h4>Enter Client's Name and Phone number</h4>
           <form>
             <input placeholder="Enter Name" onChange={(event)=>{newname(event.target.value)}}></input>
@@ -84,8 +122,9 @@ const AddClient=(props) => {
         <button className = "w-full py-3 bg-yellow-600 mt-4 text-white" onClick={()=> {getClients()}}>Client List</button>
         {flag?data.clients.map((c,index) => (
             <div key={index}>
-              <p>Name: {c.name} </p>
+              <input type="checkbox" name="index" value={c.phoneno} onChange={(e)=>checkboxChange(e.target.value)}/><label>Name: {c.name}</label>
               <p>Phone no. : {c.phoneno}</p>
+              <button onClick={()=>{let nm=c.name;delClient(nm)}}>Delete</button>
             </div>))
             :
             <div>
@@ -94,6 +133,7 @@ const AddClient=(props) => {
           </div>
         }
       </div>
+      <button className = "w-full py-3 bg-green-600 mt-4 text-white" onClick={()=> {setClients()}}>Select Clients</button>
       
       </div>
     );

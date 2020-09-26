@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { auth } from "../firebase";
-import { Link } from "@reach/router";
+import { Link } from "react-router-dom";
 
 const PasswordReset = () => {
   const [email, setEmail] = useState("");
@@ -67,7 +67,7 @@ const PasswordReset = () => {
         </form>
 
         <Link
-          to="/"
+          to="/signIn"
           className="my-2 text-blue-700 hover:text-blue-800 text-center block"
         >
           &larr; back to sign in page

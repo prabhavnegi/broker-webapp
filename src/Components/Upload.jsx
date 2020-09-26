@@ -43,9 +43,9 @@ const Upload= (props) => {
 
 const handleUpload = e => {
   e.preventDefault(); // prevent page refreshing
-    const promises = [];
+    const promises = []
     files.forEach(file => {
-     const uploadTask = storage.ref(`${uid}/${property}/${file.name}`).put(file);
+     const uploadTask = storage.ref(`${uid.uid}/${property}/${file.name}`).put(file);
         promises.push(uploadTask);
         uploadTask.on(
           "state_changed",
@@ -63,7 +63,7 @@ const handleUpload = e => {
           async () => {
             // complete function ...
          const  db_url = await storage
-              .ref(`${uid}/${property}/`)
+              .ref(`${uid.uid}/${property}/`)
               .child(file.name)
               .getDownloadURL()
               .then(url => {
@@ -86,6 +86,7 @@ const handleUpload = e => {
 
     return (
       <div className="center">
+          <button type="button" className="bg-orange-400 hover:bg-orange-500 w-full py-2 text-white" onClick={()=>history.push("/")}>Profile Page</button>
           <br/>
           <h2 className="green-text">React Firebase Image Uploader</h2>
           <br/>
@@ -122,6 +123,7 @@ const handleUpload = e => {
           width="400"
         />
          </div>
+         
     );
   }
 
