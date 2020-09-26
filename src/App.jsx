@@ -1,52 +1,13 @@
-import React, {useState,useEffect}from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import SignIn from "./Components/SignIn";
-import SignUp from "./Components/SignUp";
-import ProfilePage from "./Components/ProfilePage";
-import PasswordReset from "./Components/PasswordReset";
-import EditProfile from "./Components/EditProfile"
-import Upload from "./Components/Upload";
-import EditProp from "./Components/EditProp";
-import AuthRoute from "./auth"
-import AddClient from "./Components/AddClient"; 
-import Hiya from "./Components/hiya";
-import {auth,getUserDocument} from "./firebase"
-function App() {
-  const [loading, setLoading] = useState(true);
-  const [flag, setFlag] = useState(false);
-  useEffect(()=>{
-    auth.onAuthStateChanged( async user=>{
-      if(user)
-       setFlag(true);
-      else
-        setFlag(false)
-
-    setLoading(false)
-    })
-  
-  },[])
-  return (
-    
-        <Router>
-          <div className='broker'>
-            <Switch>
-              <Route path="/signIn" exact component={SignIn}/>
-              <Route path="/signUp" exact component={SignUp}/>
-              <Route path="/passwordReset" exact component={PasswordReset}/>
-              <AuthRoute path="/" exact component={ProfilePage}/>
-              {/*<Route path="/doom" exact component={Hiya}/>*/}
-              <Route path="/Upload" exact component={Upload}/>
-              <Route path="/Upload/:id" component={Upload}/>
-              <Route path="/EditProp/:id" component={EditProp}/>
-              <Route path="/EditProfile" render={props=>{
-                return loading?"":flag?<EditProfile {...props}/> : <SignIn/>
-              }}/>
-              <Route path="/Clients" component={AddClient}/>
-            </Switch>
-          </div>
-        </Router>
-      
-  );
+import React from 'react';
+import Application from "./Components/Application";
+import {UserProvider} from "./UserProvider/provider";
+const App = () => {
+  return(
+    <UserProvider>
+         <Application/>
+    </UserProvider>
+   
+  )
 }
 
 export default App;

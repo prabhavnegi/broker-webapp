@@ -26,7 +26,7 @@ const db = firebase.firestore(app);
 export const FieldValue = firebase.firestore.FieldValue;
 //signin with google
 export const signInWithGoogle = () => {
-    auth.signInWithPopup(provider).then(async (result)=> {
+    auth.signInWithPopup(provider).then(async(result) => {
         var user = result.user
         await generateUserDocument(user.displayName)
     });
@@ -55,34 +55,32 @@ export const deleteUser = () => {
 
 
 //generating user document
-export const generateUserDocument = async(user,name,phno) => {
+export const generateUserDocument = async(user, name, phno) => {
     if (!user) return;
     const userRef = firestore.doc(`users/${user.uid}`);
     const snapshot = await userRef.get();
-    var displayName=""
+    var displayName = ""
     if (!snapshot.exists) {
-        const { email,photoURL} = user
-        if(name){
+        const { email, photoURL } = user
+        if (name) {
             console.log("set")
-            var displayName=name
-        }
-        else
-            var {displayName}=user;
-        if(displayName)
-        {
+            var displayName = name
+        } else
+            var { displayName } = user;
+        if (displayName) {
             console.log("doc")
             try {
-            await userRef.set({
-                displayName,
-                email,
-                photoURL,
-                cat: firebase.firestore.Timestamp.now(),
-                phno
-            });
+                await userRef.set({
+                    displayName,
+                    email,
+                    photoURL,
+                    cat: firebase.firestore.Timestamp.now(),
+                    phno
+                });
             } catch (error) {
-            console.error("Error lol", error.message);
+                console.error("Error lol", error.message);
             }
-        }   
+        }
     }
     return getUserDocument(user.uid);
 };
@@ -190,7 +188,7 @@ export const updateProfile = async file => {
     }
 }
 
-export const updatePropInfo = async(addr,id) => {
+export const updatePropInfo = async(addr, id) => {
     var user = auth.currentUser
     const userRef = firestore.collection('users').doc(`${user.uid}`).collection('property_details').doc(id);
     const snapshot = await userRef.get()
@@ -207,16 +205,16 @@ export const updatePropInfo = async(addr,id) => {
     }
 }
 
-export const generateClients = async(name,phoneno) => {
-    var user=auth.currentUser;
+export const generateClients = async(name, phoneno) => {
+    var user = auth.currentUser;
     if (!user) return;
-console.log("hello")
-    const userRef = db.collection('users').doc(user.uid).collection('clients').doc(user.uid+"clients");
+    console.log("hello")
+    const userRef = db.collection('users').doc(user.uid).collection('clients').doc(user.uid + "clients");
     const snapshot = await userRef.get();
     if (!snapshot.exists) {
         try {
             await userRef.set({
-                clients:{
+                clients: {
                     name,
                     phoneno
                 }
@@ -226,7 +224,7 @@ console.log("hello")
         }
     }
     return userRef.update({
-        clients: firebase.firestore.FieldValue.arrayUnion({"name":name,"phoneno":phoneno})
+            clients: firebase.firestore.FieldValue.arrayUnion({ "name": name, "phoneno": phoneno })
         })
         .then(function() {
             console.log("Document successfully updated!");
@@ -235,4 +233,3 @@ console.log("hello")
             console.error("Error updating client document: ", error);
         });
 };
-

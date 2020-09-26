@@ -1,9 +1,9 @@
-import React, {useState,useEffect} from "react";
+import React, {useState,useEffect,useContext} from "react";
 import { Link } from "react-router-dom";
 import { signInWithGoogle } from "../firebase";
 import { auth} from "../firebase";
 import { useHistory } from "react-router";
-
+import {UserContext} from "../UserProvider/provider";
 
 const SignIn = () => {
 
@@ -12,18 +12,20 @@ const SignIn = () => {
     const [error, setError] = useState(null);
     const [flag,setFlag] = useState(false)
     const history=useHistory();
-
+    const {loading} = useContext(UserContext)
     
     
     useEffect(() => {
-      auth.onAuthStateChanged(user => {
-        if(!user){
-        setFlag(true)
-        }
+      if(!loading)
+      {
+        const user = auth.currentUser
+        if(!user)
+          setFlag(true)
+      }
         else
           history.push("/")
-      })
-    }, [])
+      
+    }, [history,loading])
     const signInWithEmailAndPasswordHandler = (event,email, password) => {
         event.preventDefault();
         auth.signInWithEmailAndPassword(email, password).then(()=>{
@@ -46,7 +48,7 @@ const SignIn = () => {
    
 
   return (
-    !flag?"":
+    !flag?"loading":
     <div className="mt-8">
       <h1 className="text-3xl mb-2 text-center font-bold">Sign In</h1>
       <div className="border border-blue-400 mx-auto w-11/12 md:w-2/4 rounded py-8 px-4 md:px-8">

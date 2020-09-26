@@ -1,8 +1,8 @@
-import React, { useState,useEffect} from "react";
+import React, {useState,useEffect,useContext} from "react";
 import {useHistory} from "react-router";
 import { Link } from "react-router-dom";
 import { auth, signInWithGoogle, generateUserDocument, emailVerify } from "../firebase";
-
+import {UserContext} from "../UserProvider/provider";
 const SignUp = () => {
   
   const [email, setEmail] = useState("");
@@ -11,18 +11,20 @@ const SignUp = () => {
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState(null);
   const [flag,setFlag] = useState(true)
-
+  const {loading} = useContext(UserContext)
   let history = useHistory();
 
   useEffect(() => {
-    auth.onAuthStateChanged(user => {
-      if(!user){
-      setFlag(true)
-      }
+    if(!loading)
+    {
+      const user = auth.currentUser
+      if(!user)
+        setFlag(true)
+    }
       else
         history.push("/")
-    })
-  }, [])
+    
+  }, [history,loading])
 
   const createUserWithEmailAndPasswordHandler = async (event, email, password) => {
     event.preventDefault();
