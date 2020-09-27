@@ -8,7 +8,7 @@ import EditProfile from "./EditProfile"
 import Upload from "./Upload";
 import EditProp from "./EditProp";
 import AddClient from "./AddClient"; 
-import Hiya from "./hiya";
+import ImmageCropper from"./imageCropper";
 
 import {UserContext} from "../UserProvider/provider";
 
@@ -31,18 +31,18 @@ function App() {
               <Route path="/signIn" exact component={SignIn}/>
               <Route path="/signUp" exact component={SignUp}/>
               <Route path="/passwordReset" exact component={PasswordReset}/>
-              {/*<AuthRoute path="/" exact component={ProfilePage}/>*/}
-              <Route path="/" render={props=>{
-                return loading?"":user?<ProfilePage {...props}/> : <SignIn/>
-              }}/>
-              {/*<Route path="/doom" exact component={Hiya}/>*/}
               <Route path="/Upload" exact component={Upload}/>
               <Route path="/Upload/:id" component={Upload}/>
               <Route path="/EditProp/:id" component={EditProp}/>
-              <Route path="/EditProfile" render={props=>{
-                return loading?"":user?<EditProfile {...props}/> : <SignIn/>
-              }}/>
               <Route path="/Clients" component={AddClient}/>
+              <Route path="/EditProfile/updateProfile" exact component={ImmageCropper}/>
+              <Route path="/EditProfile" render={props=>{
+                return loading?"hello":user?<EditProfile {...props}/> : <SignIn/>
+              }}/>
+              
+              <Route path="/" render={props=>{
+                return loading?"hello":user?<ProfilePage {...props}/> : <SignIn/>
+              }}/>
             </Switch>
           </div>
         </Router>

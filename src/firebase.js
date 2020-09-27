@@ -172,14 +172,15 @@ export const updateUserInfo = async(displayName) => {
 }
 
 
-export const updateProfile = async file => {
+export const updateProfile = async(file, name) => {
     var user = auth.currentUser
+    console.log(name)
     const userRef = firestore.doc(`users/${user.uid}`);
     try {
-        await storage.ref(`${user.uid}/ProfileImage/${file.name}`).put(file)
+        await storage.ref(`${user.uid}/ProfileImage/${name}`).put(file)
         const photo_url = await storage
             .ref(`${user.uid}/ProfileImage/`)
-            .child(file.name)
+            .child(name)
             .getDownloadURL()
             .then(url => { return url });
         await userRef.update({ photo_url: photo_url })

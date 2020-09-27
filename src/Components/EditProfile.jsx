@@ -1,6 +1,8 @@
 import React ,{useEffect,useState}from "react"
 import {auth,generateUserDocument,updatePassword, updateUserInfo, updateProfile} from "../firebase";
 import { useHistory } from "react-router";
+import {Link} from "react-router-dom";
+
 
 const EditProfile = () => {
     const [displayName, setDp] = useState();
@@ -13,6 +15,7 @@ const EditProfile = () => {
     const [profilePic, setProfilePic] = useState("");
     const [success,setSuccess] = useState();
     const [isLoading,setLoading] = useState(false); 
+    const [newProfile,setNewProfile] = useState();
     let history = useHistory();
 
 
@@ -116,6 +119,8 @@ const EditProfile = () => {
             {error}
           </div>
         )}
+        <Link to="/EditProfile/updateProfile"><button className = "w-full py-3 bg-blue-600 mt-4 text-white">Update Profile</button></Link>
+        
               <form className="">
                     <label htmlFor="userEmail" className="block">
                         Email:
