@@ -20,9 +20,10 @@ const SignUp = () => {
       const user = auth.currentUser
       if(!user)
         setFlag(true)
-    }
       else
         history.push("/")
+    }
+     
     
   }, [history,loading])
 
@@ -30,7 +31,7 @@ const SignUp = () => {
     event.preventDefault();
     try{
       const {user} = await auth.createUserWithEmailAndPassword(email, password);
-      generateUserDocument(user,displayName,phno)
+      await generateUserDocument(user,displayName,phno)
       emailVerify(user);
     }
     catch(error){

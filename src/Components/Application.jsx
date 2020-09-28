@@ -9,8 +9,9 @@ import Upload from "./Upload";
 import EditProp from "./EditProp";
 import AddClient from "./AddClient"; 
 import ImmageCropper from"./imageCropper";
-
+import SignInSwitch from "./signInSwitch";
 import {UserContext} from "../UserProvider/provider";
+
 
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
         <Router>
           <div className='broker'>
             <Switch>
-              <Route path="/signIn" exact component={SignIn}/>
+              <Route path="/signIn" exact component={SignInSwitch}/>
               <Route path="/signUp" exact component={SignUp}/>
               <Route path="/passwordReset" exact component={PasswordReset}/>
               <Route path="/Upload" exact component={Upload}/>
@@ -37,11 +38,10 @@ function App() {
               <Route path="/Clients" component={AddClient}/>
               <Route path="/EditProfile/updateProfile" exact component={ImmageCropper}/>
               <Route path="/EditProfile" render={props=>{
-                return loading?"hello":user?<EditProfile {...props}/> : <SignIn/>
+                return loading?"":user?<EditProfile {...props}/> : <SignIn/>
               }}/>
-              
               <Route path="/" render={props=>{
-                return loading?"hello":user?<ProfilePage {...props}/> : <SignIn/>
+                return loading?"":user?<ProfilePage {...props}/> : <SignIn/>
               }}/>
             </Switch>
           </div>
