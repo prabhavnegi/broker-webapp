@@ -1,6 +1,7 @@
 import React,{useState} from 'react';
 import {generateClients,auth,firestore,FieldValue} from '../firebase';
 import { useHistory } from 'react-router';
+import {Link} from "react-router-dom";
 
 const AddClient=(props) => {
     const [name,newname]=useState('');
@@ -11,6 +12,11 @@ const AddClient=(props) => {
     const [val,setVal]=useState({});
     const [search,setSearch]=useState();
     const selected=new Set();
+
+    const [docs,setDocs]=useState([]);
+    const [propflag,setPropflag]=useState(false);
+    const [propCheck,setPropcheck]=useState(false);
+    const selectedProp=new Set();
     const history=useHistory();
 
     const submitter= async ()=>{
@@ -95,6 +101,36 @@ const AddClient=(props) => {
       })
     }
 
+    //prop functions 
+    const Properties= ()=>{
+      getProps()
+   }
+
+    const getProps =  async () => {
+      var user=auth.currentUser
+      const props = await firestore.collection('users').doc(user.uid).collection('property_details').get();
+      const properties=props.docs
+      properties.forEach(p => {
+        const z = p.data()
+        setDocs(docs=>[...docs,z])
+      })
+      setPropflag(true);
+    }
+
+    const PropboxChange=(val)=>{
+      if(selectedProp.has(val))
+        selectedProp.delete(val);
+      else
+        selectedProp.add(val);
+    setPropcheck(true);
+  }
+
+  const setProps=()=>{
+    selectedProp.forEach(prop => {
+      console.log(prop)
+    })
+  }
+
     return (
       <div>
         <div>
@@ -134,7 +170,16 @@ const AddClient=(props) => {
         }
       </div>
       <button className = "w-full py-3 bg-green-600 mt-4 text-white" onClick={()=> {setClients()}}>Select Clients</button>
-      
+      <button className = "w-full py-3 bg-red-600 mt-4 text-white" onClick = {() => {Properties()}}>Show</button>
+      {propflag &&  
+        docs.map(p =>(  
+            <div key={p.name}>
+                <input type="checkbox" name="prop" value={p.name} onChange={(e)=>PropboxChange(e.target.value)}/><label>Property Name: {p.name}</label>
+                <img src={p.URL[0]} style={{height:"100px",width:"100px"}}/>
+            </div>
+            ))
+        }
+        {propCheck?<button className = "w-full py-3 bg-green-600 mt-4 text-white" onClick={()=> {setProps()}}>Select</button>:""}
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import React, {useState,useEffect,useContext} from "react";
 import {useHistory} from "react-router";
 import { Link } from "react-router-dom";
-import { auth, signInWithGoogle, generateUserDocument, emailVerify } from "../firebase";
+import { auth, signUpWithGoogle, generateUserDocument, emailVerify } from "../firebase";
 import {UserContext} from "../UserProvider/provider";
 const SignUp = () => {
   
@@ -129,14 +129,14 @@ const SignUp = () => {
         <button
           onClick={() => {
             try {
-              signInWithGoogle();
+              signUpWithGoogle();
             } catch (error) {
-              console.error("Error signing in with Google", error);
+              console.error("Error signing up with Google", error);
             }
           }}
           className="bg-red-500 hover:bg-red-600 w-full py-2 text-white"
         >
-          Sign In with Google
+          Sign Up with Google
         </button>
         <p className="text-center my-3">
           Already have an account?{" "}

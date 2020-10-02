@@ -1,11 +1,12 @@
 import React ,{useEffect,useState}from "react"
-import {auth,firestore,storage,FieldValue,updatePropInfo} from "../firebase";
+import {auth,firestore,storage,FieldValue,updatePropInfo,storageDel} from "../firebase";
 import { useHistory } from "react-router";
 
 const EditProp = (props) => {
     const [propName,setpropName]= useState();
     const [propAddr,setpropAddr]= useState();
     const [URL,setURL]=useState();
+    const history=useHistory();
 
     useEffect( () => {
         getUser()
@@ -45,9 +46,21 @@ const EditProp = (props) => {
         getUser();
       }
 
-
+    const deleteProp=async()=>{
+        const user=await auth.currentUser;
+        const docRef = await firestore.collection('users').doc(user.uid).collection('property_details').doc(propName);
+        docRef.delete().then(function() {
+            console.log("Property successfully deleted!");
+        }).catch(function(error) {
+            console.error("Error removing property: ", error);
+        });
+        storageDel(propName);
+        history.push("/")
+    }
+    
     return(
         <div>
+            <button type="button" className="bg-yellow-400 hover:bg-yellow-500 w-full py-2 text-white" onClick={()=>deleteProp()}>Delete Property</button>
             <form>
                     <label htmlFor="propName" className="block">
                         Property Name:

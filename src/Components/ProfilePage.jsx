@@ -11,8 +11,6 @@ const ProfilePage =  () => {
 const [user,setUser] = useState({})
 const [docs,setDocs] = useState([])
 const [hidden,setHidden] = useState({})
-const [flag,setFlag]=useState(false)
-const selectedProp= new Set()
 
 useEffect( () => {
   getUser()
@@ -45,31 +43,6 @@ const showImage = name => {
   setHidden({[name]:!hidden[name]})
 }
 
-const checkboxChange=(val)=>{
-    if(selectedProp.has(val)){
-      selectedProp.delete(val);
-      console.log("remove")
-    }
-    else{
-      selectedProp.add(val);
-      console.log("add")
-    }
-  console.log(selectedProp)
-  setFlag(true);
-}
-
-const setProp=()=>{
-
-}
-
-const delProp=(name)=>{
-  var user=auth.currentUser
-  firestore.collection('users').doc(user.uid).collection('property_details').doc(name).delete()
-  .then(()=> console.log("Property deleted"))
-  .catch(()=> console.log("error deleting property"))
-}
-
-
   return (
     <div className = "mx-auto w-11/12 md:w-2/4 py-8 px-4 md:px-8">
       <div className="flex border flex-col items-center md:flex-row md:items-start border-blue-400 px-3 py-4">
@@ -98,7 +71,7 @@ const delProp=(name)=>{
         docs.map(p =>(  
 
           <div key={p.name}>
-              <input type="checkbox" name="prop" value={p.name} onChange={(e)=>checkboxChange(e.target.value)}/><label>Property Name: {p.name}</label>  
+              <h1>Property Name: {p.name}</h1>  
               <h2>{p.address}</h2>
               <button onClick={()=> showImage(p.name)}><h3>Show Images</h3></button>
               
@@ -118,15 +91,10 @@ const delProp=(name)=>{
               } 
               </AliceCarousel> }
               <br/>
-              <button onClick={()=>{delProp(p.name)}}>Delete Property</button><br/>
               <Link to={{pathname:`/EditProp/${p.name}`, state:{uid:[user.uid]}}}><button>Edit Property</button></Link>
           </div>
         ))
       }
-      {flag?<button className = "w-full py-3 bg-green-600 mt-4 text-white" onClick={()=> {setProp()}}>Select</button>:""}
-
-
-
     </div>
 
   ) 

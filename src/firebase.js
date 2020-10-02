@@ -25,12 +25,24 @@ const db = firebase.firestore(app);
 
 export const FieldValue = firebase.firestore.FieldValue;
 //signin with google
+export const signUpWithGoogle = () => {
+    auth.signInWithPopup(provider).then(async(result) => {
+        var user = result.user
+        await generateUserDocument(user)
+    })
+}
+
 export const signInWithGoogle = () => {
     auth.signInWithPopup(provider).then(async(result) => {
         var user = result.user
-        await generateUserDocument(user.displayName)
-    });
-
+        var isNewUser=result.additionalUserInfo.isNewUser;
+        if(isNewUser){
+            result.user.delete();
+            window.location.replace("http://localhost:3000/signUp")
+            alert("Account not found")
+        }
+    })
+    .catch((e)=>console.log(e))
 };
 
 //email verification
@@ -55,7 +67,7 @@ export const deleteUser = () => {
 
 
 //generating user document
-export const generateUserDocument = async(user, name, phno) => {
+export const generateUserDocument = async(user, name, phno="") => {
     if (!user) return;
     const userRef = firestore.doc(`users/${user.uid}`);
     const snapshot = await userRef.get();
@@ -234,3 +246,22 @@ export const generateClients = async(name, phoneno) => {
             console.error("Error updating client document: ", error);
         });
 };
+
+export const storageDel=(pName)=>{
+    const user=auth.currentUser
+    const userRef= firebase.storage().ref(`${user.uid}/${pName}`);
+    userRef.listAll()
+        .then(f => {
+            f.items.forEach(img => {
+                img.delete();
+                console.log("image deleted")
+            })
+        })
+}
+
+export const Reauthenticate = (Password) => {
+    var user = firebase.auth().currentUser;
+    var cred = firebase.auth.EmailAuthProvider.credential(user.email, Password);
+
+    return user.reauthenticateWithCredential(cred);
+  }
