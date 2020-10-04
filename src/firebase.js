@@ -32,17 +32,17 @@ export const signUpWithGoogle = () => {
     })
 }
 
-export const signInWithGoogle = () => {
-    auth.signInWithPopup(provider).then(async(result) => {
-        var user = result.user
-        var isNewUser=result.additionalUserInfo.isNewUser;
-        if(isNewUser){
-            result.user.delete();
-            window.location.replace("http://localhost:3000/signUp")
-            alert("Account not found")
-        }
-    })
-    .catch((e)=>console.log(e))
+export const signInWithGoogle = async() => {
+    return auth.signInWithPopup(provider).then((result) => {
+            var isNewUser = result.additionalUserInfo.isNewUser;
+            if (isNewUser) {
+                console.log("new")
+                result.user.delete()
+                return "Account dosen't exist"
+            } else
+                return ""
+        })
+        .catch((e) => console.log(e))
 };
 
 //email verification
@@ -67,7 +67,7 @@ export const deleteUser = () => {
 
 
 //generating user document
-export const generateUserDocument = async(user, name, phno="") => {
+export const generateUserDocument = async(user, name, phno = "") => {
     if (!user) return;
     const userRef = firestore.doc(`users/${user.uid}`);
     const snapshot = await userRef.get();
@@ -102,7 +102,6 @@ export const getUserDocument = async uid => {
     if (!uid) return null;
     try {
         const userDocument = await firestore.doc(`users/${uid}`).get();
-
         return {
             uid,
             ...userDocument.data()
@@ -112,7 +111,16 @@ export const getUserDocument = async uid => {
     }
 };
 
-//generating property doc
+export const UserCheck = async(user) => {
+        if (!user) return;
+        const userRef = firestore.doc(`users/${user.uid}`);
+        const snapshot = await userRef.get();
+        if (!snapshot.exists)
+            return null
+        else
+            return user
+    }
+    //generating property doc
 export const generatePropDocument = async(user, name, address, url) => {
     if (!user) return;
 
@@ -247,9 +255,9 @@ export const generateClients = async(name, phoneno) => {
         });
 };
 
-export const storageDel=(pName)=>{
-    const user=auth.currentUser
-    const userRef= firebase.storage().ref(`${user.uid}/${pName}`);
+export const storageDel = (pName) => {
+    const user = auth.currentUser
+    const userRef = firebase.storage().ref(`${user.uid}/${pName}`);
     userRef.listAll()
         .then(f => {
             f.items.forEach(img => {
@@ -264,4 +272,4 @@ export const Reauthenticate = (Password) => {
     var cred = firebase.auth.EmailAuthProvider.credential(user.email, Password);
 
     return user.reauthenticateWithCredential(cred);
-  }
+}

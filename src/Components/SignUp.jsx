@@ -11,21 +11,18 @@ const SignUp = () => {
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState(null);
   const [flag,setFlag] = useState(true)
-  const {loading} = useContext(UserContext)
+  const {userData,loading} = useContext(UserContext)
   let history = useHistory();
 
   useEffect(() => {
     if(!loading)
     {
-      const user = auth.currentUser
-      if(!user)
+      if(!userData)
         setFlag(true)
       else
         history.push("/")
     }
-     
-    
-  }, [history,loading])
+  }, [history,loading,userData])
 
   const createUserWithEmailAndPasswordHandler = async (event, email, password) => {
     event.preventDefault();

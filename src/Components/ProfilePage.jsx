@@ -34,6 +34,7 @@ const delUser = () => {
   firestore.collection("users").doc(user.uid).delete()
   .then(()=> {
     console.log("Document successfully deleted!");
+    
   }).catch(function(error) {
     console.error("Error removing document: ", error);
   });

@@ -37,8 +37,8 @@ const EditProp = (props) => {
     }
 
     const deletePhoto=async(image)=> {
-        const user=await auth.currentUser;
-        const userRef = await firestore.collection('users').doc(user.uid).collection('property_details').doc(propName);
+        const user=  auth.currentUser;
+        const userRef = firestore.collection('users').doc(user.uid).collection('property_details').doc(propName);
         userRef.update({URL:FieldValue.arrayRemove(image)});
         console.log("image deleted")
         storage.ref().child(user.uid).child(image).delete()
@@ -47,8 +47,8 @@ const EditProp = (props) => {
       }
 
     const deleteProp=async()=>{
-        const user=await auth.currentUser;
-        const docRef = await firestore.collection('users').doc(user.uid).collection('property_details').doc(propName);
+        const user= auth.currentUser;
+        const docRef = firestore.collection('users').doc(user.uid).collection('property_details').doc(propName);
         docRef.delete().then(function() {
             console.log("Property successfully deleted!");
         }).catch(function(error) {
@@ -75,7 +75,7 @@ const EditProp = (props) => {
             </form>
             {URL && URL.map(img => (
                 <div>
-                <img src={img} style={{height:"400px", width:"400px"}}/>
+                <img src={img} style={{height:"400px", width:"400px"}} alt=""/>
                 <button onClick={() => {deletePhoto(img)}}>remove</button>
                 </div>
             ))

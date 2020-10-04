@@ -1,5 +1,5 @@
-import React, {useState,useEffect,useContext}from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React, {useEffect,useContext}from "react";
+import { BrowserRouter as Router, Route, Switch,Redirect} from "react-router-dom";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import ProfilePage from "./ProfilePage";
@@ -16,7 +16,7 @@ import {UserContext} from "../UserProvider/provider";
 
 function App() {
 
-  const {user,loading,err} = useContext(UserContext)
+  const {userData,isLoading,err} = useContext(UserContext)
   useEffect(()=>{
     const error = err
    if(error)
@@ -30,18 +30,20 @@ function App() {
           <div className='broker'>
             <Switch>
               <Route path="/signIn" exact component={SignInSwitch}/>
-              <Route path="/signUp" exact component={SignUp}/>
               <Route path="/passwordReset" exact component={PasswordReset}/>
               <Route path="/Upload" exact component={Upload}/>
               <Route path="/Upload/:id" component={Upload}/>
               <Route path="/EditProp/:id" component={EditProp}/>
               <Route path="/Clients" component={AddClient}/>
               <Route path="/EditProfile/updateProfile" exact component={ImmageCropper}/>
+              <Route path="/signUp" render={props=>{
+                return isLoading?"hello":userData?<Redirect to="/" {...props}/> : <SignUp/>
+              }}/>
               <Route path="/EditProfile" render={props=>{
-                return loading?"":user?<EditProfile {...props}/> : <SignIn/>
+                return isLoading?"":userData?<EditProfile {...props}/> : <Redirect to="/"/>
               }}/>
               <Route path="/" render={props=>{
-                return loading?"":user?<ProfilePage {...props}/> : <SignIn/>
+                return isLoading?"hello":userData?<ProfilePage {...props}/> : <SignIn/>
               }}/>
             </Switch>
           </div>
