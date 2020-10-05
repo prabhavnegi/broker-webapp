@@ -32,7 +32,7 @@ export const UserProvider = (props) => {
          useEffect(() => {
             if(!loading)
                 {
-                    if(user)
+                    if(user && user.emailVerified)
                         fun()
                     else
                         {

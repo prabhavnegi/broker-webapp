@@ -29,7 +29,9 @@ const SignUp = () => {
     try{
       const {user} = await auth.createUserWithEmailAndPassword(email, password);
       await generateUserDocument(user,displayName,phno)
-      emailVerify(user);
+      await emailVerify(user);
+      setError("A verification mail has been sent to you")
+
     }
     catch(error){
       setError('Error Signing up with email and password');
@@ -53,6 +55,18 @@ const SignUp = () => {
       setPhno(value);
     }
   };
+  
+  const signUpGoogle = async () => {
+    try{
+      await signUpWithGoogle()
+    }
+    catch (errro)
+    {
+      console.log(error)
+    }
+    
+
+  }
 
   return (
     !flag?"":
@@ -126,7 +140,7 @@ const SignUp = () => {
         <button
           onClick={() => {
             try {
-              signUpWithGoogle();
+              signUpGoogle();
             } catch (error) {
               console.error("Error signing up with Google", error);
             }

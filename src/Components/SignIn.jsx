@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { Link } from "react-router-dom";
-import { signInWithGoogle } from "../firebase";
+import { emailVerify, signInWithGoogle } from "../firebase";
 import { auth} from "../firebase";
 
 
@@ -9,10 +9,15 @@ const SignIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    
+    const [flag,setFlag] = useState(false)
     const signInWithEmailAndPasswordHandler = (event,email, password) => {
         event.preventDefault();
-        auth.signInWithEmailAndPassword(email, password).then(()=>{
+        auth.signInWithEmailAndPassword(email, password).then((result)=>{
+            if(!result.user.emailVerified)
+               { 
+                setError("Verify your account first")
+                setFlag(true)
+              }
         }).catch(error => {
         setError("Error signing in with password and email!");
           console.error("Error signing in with password and email", error);
@@ -35,6 +40,10 @@ const SignIn = () => {
             setError(err)
       }
    
+      const sendVerification = async () => {
+        await emailVerify(auth.currentUser)
+        setError("Email Sent")
+      }
 
   return (
     <div className="mt-8">
@@ -66,6 +75,9 @@ const SignIn = () => {
             id="userPassword"
             onChange = {(event) => onChangeHandler(event)}
           />
+           {flag &&<button type="button" className="bg-blue-400 hover:bg-blue-500 w-full py-2 text-white" style={{marginBottom:"10%"}} onClick = {() => {sendVerification()}}>
+            Resend Verfication Mail Again
+          </button>}
           <button className="bg-green-400 hover:bg-green-500 w-full py-2 text-white" onClick = {(event) => {signInWithEmailAndPasswordHandler(event, email, password)}}>
             Sign in
           </button>

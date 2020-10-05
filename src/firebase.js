@@ -25,10 +25,26 @@ const db = firebase.firestore(app);
 
 export const FieldValue = firebase.firestore.FieldValue;
 //signin with google
-export const signUpWithGoogle = () => {
-    auth.signInWithPopup(provider).then(async(result) => {
+export const signUpWithGoogle = async() => {
+    return auth.signInWithPopup(provider).then(async(result) => {
         var user = result.user
-        await generateUserDocument(user)
+        const { email, displayName, photoURL } = user
+        const userRef = firestore.doc(`users/${user.uid}`)
+        const phno = ""
+        try {
+            await userRef.set({
+                displayName,
+                email,
+                photoURL,
+                cat: firebase.firestore.Timestamp.now(),
+                phno
+            });
+        } catch (error) {
+            console.error("Error lol", error.message);
+        }
+
+    }).catch((error) => {
+        return error
     })
 }
 
@@ -46,9 +62,10 @@ export const signInWithGoogle = async() => {
 };
 
 //email verification
-export const emailVerify = (user) => {
-    user.sendEmailVerification().then(() => {
+export const emailVerify = async(user) => {
+    return user.sendEmailVerification().then(() => {
         console.log("Email Sent")
+        auth.signOut()
     }).catch((error) => {
         console.log("error");
     });
