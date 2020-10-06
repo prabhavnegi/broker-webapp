@@ -72,12 +72,60 @@ export const emailVerify = async(user) => {
 };
 
 //delete user
+const deleteFolderContents=async(path) => {
+    const ref = storage.ref(path);
+    ref.listAll()
+      .then(dir => {
+        dir.items.forEach(fileRef => {
+          deleteFile(ref.fullPath, fileRef.name);
+        });
+        dir.prefixes.forEach(folderRef => {
+          deleteFolderContents(folderRef.fullPath);
+        })
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  const deleteFile=(pathToFile, fileName) => {
+    const ref = storage.ref(pathToFile);
+    const childRef = ref.child(fileName);
+    childRef.delete()
+  }
+  
 export const deleteUser = () => {
     var user = auth.currentUser;
+    //delete docs
+    try{
+        var clients = db.collection('users').doc(user.uid).collection('clients')
+        clients.get().then((Snapshot) => {
+        Snapshot.forEach((doc) => {
+            doc.ref.delete();
+            });
+        });
+    }
+    catch{
+        console.log("no clients")
+    }
+    try{
+        var property = db.collection('users').doc(user.uid).collection('property_details')
+        property.get().then((Snapshot) => {
+        Snapshot.forEach((doc) => {
+            doc.ref.delete();
+            });
+        });
+        }
+    catch{
+        console.log("no props")
+    }
+    //delete stprage
+    deleteFolderContents(user.uid)
+
     user.delete()
         .then(() => {
             console.log("User deleted")
-        }).catch((error) => {
+        }).catch(() => {
             console.log("Error deleting user")
         });
 };
