@@ -10,6 +10,7 @@ import EditProp from "./EditProp";
 import AddClient from "./AddClient"; 
 import ImmageCropper from"./imageCropper";
 import SignInSwitch from "./signInSwitch";
+import Pdf from "./Pdf";
 import {UserContext} from "../UserProvider/provider";
 
 
@@ -35,6 +36,7 @@ function App() {
               <Route path="/Upload/:id" component={Upload}/>
               <Route path="/EditProp/:id" component={EditProp}/>
               <Route path="/Clients" component={AddClient}/>
+              <Route path="/Pdf" component={Pdf}/>
               <Route path="/EditProfile/updateProfile" exact component={ImmageCropper}/>
               <Route path="/signUp" render={props=>{
                 return isLoading?"hello":userData?<Redirect to="/" {...props}/> : <SignUp/>

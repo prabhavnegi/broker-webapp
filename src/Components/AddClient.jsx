@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import {generateClients,auth,firestore,FieldValue} from '../firebase';
 import { useHistory } from 'react-router';
 import {Link} from "react-router-dom";
@@ -101,6 +101,7 @@ const AddClient=(props) => {
       })
     }
 
+
     //prop functions 
     const Properties= ()=>{
       getProps()
@@ -117,11 +118,12 @@ const AddClient=(props) => {
       setPropflag(true);
     }
 
-    const PropboxChange=(val)=>{
-      if(selectedProp.has(val))
-        selectedProp.delete(val);
+    const PropboxChange=(e)=>{
+      console.log(e.currentTarget.checked)
+      if(e.currentTarget.checked)
+        selectedProp.add(e.currentTarget.value);
       else
-        selectedProp.add(val);
+        selectedProp.delete(e.currentTarget.value)
     setPropcheck(true);
   }
 
@@ -174,12 +176,18 @@ const AddClient=(props) => {
       {propflag &&  
         docs.map(p =>(  
             <div key={p.name}>
-                <input type="checkbox" name="prop" value={p.name} onChange={(e)=>PropboxChange(e.target.value)}/><label>Property Name: {p.name}</label>
+                <input type="checkbox" name="prop" value={p.name} onChange={PropboxChange}/><label>Property Name: {p.name}</label>
                 <img src={p.URL[0]} style={{height:"100px",width:"100px"}}/>
             </div>
             ))
         }
-        {propCheck?<button className = "w-full py-3 bg-green-600 mt-4 text-white" onClick={()=> {setProps()}}>Select</button>:""}
+        {propCheck?
+        <div>
+          <button className = "w-full py-3 bg-green-600 mt-4 text-white" onClick={()=> {setProps()}}>Select</button>
+          <br/>
+          <button type="button" className="bg-purple-700 hover:bg-purple-900 w-full py-2 text-white" onClick={()=>history.push("/Pdf")}>Pdf Generator</button>
+        </div> :""}
+
       </div>
     );
   }
