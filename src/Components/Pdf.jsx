@@ -1,6 +1,6 @@
 import React from 'react';
 import { PDFViewer,Document, Page, View, Text, Image, StyleSheet} from '@react-pdf/renderer';
-import Logo from "../Images/tpp.png";
+
 
 const styles=StyleSheet.create({
     page: { 
@@ -27,7 +27,6 @@ const Pdf= (props)=>{
             <Document>
                 <Page style={styles.page}>
                     <View>
-                        <Image src={Logo} style={styles.logo}/>
                         <View style={styles.section}>
                             <Text style={styles.text}>Property Name:</Text>
                             <Text style={styles.text}>Property Address:</Text>
