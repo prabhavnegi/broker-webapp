@@ -1,0 +1,9 @@
+.main-footer {
+  color: #808080;
+  background-color: black;
+  padding-top: 1rem;
+  position: fixed;
+  bottom: 0;
+  
+  width: 100%;
+}

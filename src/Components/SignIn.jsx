@@ -135,7 +135,7 @@ const SignIn = () => {
             {error}
           </Alert>
           }
-          <form className={classes.form} noValidate>
+          <form className={classes.form} noValidate onSubmit={signInWithEmailAndPasswordHandler}>
             <TextField
               variant="outlined"
               margin="normal"

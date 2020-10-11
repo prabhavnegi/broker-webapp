@@ -1,8 +1,11 @@
 import React from "react";
-import {storage, generatePropDocument,auth} from "../firebase";
+import {storage, generatePropDocument,auth} from "../../firebase";
 import {useState,useEffect} from 'react';
 import {useHistory} from "react-router";
+import {Modal,Button} from 'react-bootstrap';
+import {Form} from 'react-bootstrap';
 
+//props match id location state
 const Upload= (props) => {
  
   const [progress,setProgress] = useState(0);
@@ -15,13 +18,7 @@ const Upload= (props) => {
 
   const [files, setFiles] = useState([])
 
-  useEffect(() => {
-    if(!props.location.state)
-      history.push("/")
-    else
-      setProperty(props.match.params.id)
-      setUid(props.location.state)
-  }, [])
+  
 
   const handleChange = e => {
     for (let i = 0; i < e.target.files.length; i++) {
@@ -85,44 +82,45 @@ const handleUpload = e => {
   }
 
     return (
-      <div className="center">
-          <button type="button" className="bg-orange-400 hover:bg-orange-500 w-full py-2 text-white" onClick={()=>history.push("/")}>Profile Page</button>
-          <br/>
-          <h2 className="green-text">React Firebase Image Uploader</h2>
-          <br/>
-          <br/>
-        <div className="row">
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Upload
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>Upload Property Here</h4>
+          <Form>
+            
+            <div>
+            <Form.Group controlId="formBasicEmail">
+            <Form.Label>Property Name</Form.Label>
+            <Form.Control type="text" placeholder="Enter Name" value={property} onChange={handleProperty} />
+          </Form.Group>
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Property Address</Form.Label>
+              <Form.Control type="text" placeholder="Address" onChange={handleAddr} value={addr}/>
+            </Form.Group>
+            </div>
+            <Form.Group controlId="formBasicPassword">
+              <input type="file" multiple onChange={handleChange} />
+            </Form.Group>
+            <div className="row">
           <progress value={progress} max="100" className="progress" />
         </div>
-        <br />
-        <br />
-        <br />
-        <div className="file-field input-field">
-          <div className="btn">
-            <span>File</span>
-            <input type="file" multiple onChange={handleChange} />
-            { !props.match.params.id &&<div>
-              <input type="text" onChange={handleProperty} name="property" value={property} placeholder="property"/>
-              <textarea  onChange={handleAddr} name="addr" value={addr} placeholder="Address"/>
-              </div>}
-          </div>
-          <div className="file-path-wrapper">
-            <input className="file-path validate" type="text" />
-          </div>
-        </div>
-        <button
-          onClick={handleUpload}
-          className="waves-effect waves-light btn"> Upload
-        </button>
-        <br />
-        <br />
-        <img
-          src={url || "https://via.placeholder.com/400x300"}
-          alt="Uploaded Images"
-          height="300"
-          width="400"
-        />
-         </div>
+          </Form>
+                    
+        </Modal.Body>
+        <Modal.Footer>
+            <Button onClick={handleUpload} >Submit</Button>
+          <Button onClick={props.onHide} >Close</Button>
+        </Modal.Footer>
+      </Modal>
          
     );
   }

@@ -5,13 +5,15 @@ import SignUp from "./SignUp";
 import ProfilePage from "./ProfilePage";
 import PasswordReset from "./PasswordReset";
 import EditProfile from "./EditProfile"
-import Upload from "./Upload";
 import EditProp from "./EditProp";
 import AddClient from "./AddClient"; 
 import ImmageCropper from"./imageCropper";
 import SignInSwitch from "./signInSwitch";
 import Pdf from "./Pdf";
 import {UserContext} from "../UserProvider/provider";
+import ClippedDrawer from './Dashboard_components/dashboard_material';
+import HomePage from './HomePage';
+
 
 
 function App() {
@@ -31,20 +33,23 @@ function App() {
             <Switch>
               <Route path="/signIn" exact component={SignInSwitch}/>
               <Route path="/passwordReset" exact component={PasswordReset}/>
-              <Route path="/Upload" exact component={Upload}/>
-              <Route path="/Upload/:id" component={Upload}/>
               <Route path="/EditProp/:id" component={EditProp}/>
-              <Route path="/Clients" component={AddClient}/>
-              <Route path="/Pdf" component={Pdf}/>
+              <Route path="/Clients"  exact component={AddClient}/>
+              <Route path="/Pdf" exact component={Pdf}/>
+              <Route path="/homepage" exact component={HomePage}/>
               <Route path="/EditProfile/updateProfile" exact component={ImmageCropper}/>
+              <Route path="/dash" render={props=>{
+                return isLoading?"":userData?<ClippedDrawer {...props}/> : <Redirect to="/"/>
+              }}/>
               <Route path="/signUp" render={props=>{
                 return isLoading?"hello":userData?<Redirect to="/" {...props}/> : <SignUp/>
               }}/>
               <Route path="/EditProfile" render={props=>{
                 return isLoading?"":userData?<EditProfile {...props}/> : <Redirect to="/"/>
               }}/>
+
               <Route path="/" render={props=>{
-                return isLoading?"hello":userData?<ProfilePage {...props}/> : <SignIn/>
+                return isLoading?"loading":userData?<ProfilePage {...props}/> : <SignIn/>
               }}/>
             </Switch>
           </div>

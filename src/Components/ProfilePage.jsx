@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from "react";
 import {Link} from "react-router-dom";
-import {auth,firestore,FieldValue,getUserDocument,storage, deleteUser} from "../firebase";
+import {auth,firestore,getUserDocument,deleteUser} from "../firebase";
 import AliceCarousel from 'react-alice-carousel';
 import "react-alice-carousel/lib/alice-carousel.css"
 
