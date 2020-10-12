@@ -21,17 +21,17 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
-function createData(name, phno) {
-    return { name, phno };
+function createData(pname, addr) {
+    return { pname, addr };
 }
 
 const rows = [
-    createData('Client1 ', 9898989898),
-    createData('Client2', 8989898989),
-    createData('Client3 ', 98989189898),
-    createData('Client4', 8989898989),
-    createData('Client5 ', 9898989898),
-    createData('Client6', 82989898989),
+    createData('P1 ', 'A1'),
+    createData('P2', 'A2'),
+    createData('P3 ', 'A3'),
+    createData('P4', 'A4'),
+    createData('P5 ', 'A5'),
+    createData('P6', 'A6'),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -61,8 +61,8 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
-  { id: 'phno', numeric: true, disablePadding: false, label: 'Contact No' },
+  { id: 'name', numeric: false, disablePadding: true, label: 'Property Name' },
+  { id: 'phno', numeric: false, disablePadding: false, label: 'Address' },
 ];
 
 function EnhancedTableHead(props) {
@@ -153,7 +153,7 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       ) : (
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          Client List
+          Property List
         </Typography>
       )}
 
@@ -202,7 +202,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EnhancedTable() {
+export default function EnhancedPropTable() {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
@@ -305,9 +305,9 @@ export default function EnhancedTable() {
                         />
                       </TableCell>
                       <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.name}
+                        {row.pname}
                       </TableCell>
-                      <TableCell align="left">{row.phno}</TableCell>
+                      <TableCell align="left">{row.addr}</TableCell>
                     </TableRow>
                   );
                 })}

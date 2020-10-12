@@ -1,38 +1,32 @@
 import React from "react";
 import {storage, generatePropDocument,auth} from "../../firebase";
-import {useState,useEffect} from 'react';
-import {useHistory} from "react-router";
-import {Modal,Button} from 'react-bootstrap';
-import {Form} from 'react-bootstrap';
+import {useState} from 'react';
+import {Modal,Button,Form,Image,Row,Col} from 'react-bootstrap';
+import './Upload.css';
+
 
 //props match id location state
 const Upload= (props) => {
  
   const [progress,setProgress] = useState(0);
   const [property,setProperty] = useState();
-  const [url,setUrl]= useState("");
   const [addr,setAddr]=useState("");
-  const [uid,setUid]=useState("");
-  const user = auth.currentUser
-  const history = useHistory();
-
   const [files, setFiles] = useState([])
 
+  const user = auth.currentUser
   
 
   const handleChange = e => {
     for (let i = 0; i < e.target.files.length; i++) {
       const newFile = e.target.files[i];
-      newFile["id"] = Math.random();
-   // add an "id" property to each File object
       setFiles(prevState => [...prevState, newFile]);
     }
   };
 
-
  const handleProperty = e => {
       setProperty(e.target.value)
   };
+
 
   const handleAddr = e => {
     setAddr(e.target.value)
@@ -42,7 +36,7 @@ const handleUpload = e => {
   e.preventDefault(); // prevent page refreshing
     const promises = []
     files.forEach(file => {
-     const uploadTask = storage.ref(`${uid.uid}/${property}/${file.name}`).put(file);
+     const uploadTask = storage.ref(`${user.uid}/${property}/${file.name}`).put(file);
         promises.push(uploadTask);
         uploadTask.on(
           "state_changed",
@@ -60,11 +54,10 @@ const handleUpload = e => {
           async () => {
             // complete function ...
          const  db_url = await storage
-              .ref(`${uid.uid}/${property}/`)
+              .ref(`${user.uid}/${property}/`)
               .child(file.name)
               .getDownloadURL()
               .then(url => {
-                setUrl(url);
                 return url
               });
             updateDoc(db_url)
@@ -79,7 +72,16 @@ const handleUpload = e => {
   const updateDoc= (url) => {
     console.log(url);
      generatePropDocument(user,property,addr,url);
+     
   }
+
+  const delImageHandler = (file) => {
+    console.log(file)
+     const arr = files.filter(item => item !== file)
+     setFiles(arr)
+
+ }
+
 
     return (
       <Modal
@@ -110,15 +112,23 @@ const handleUpload = e => {
             <Form.Group controlId="formBasicPassword">
               <input type="file" multiple onChange={handleChange} />
             </Form.Group>
-            <div className="row">
-          <progress value={progress} max="100" className="progress" />
-        </div>
           </Form>
-                    
+            <div className="row">
+                <progress value={progress} max="100" className="progress" />
+                </div>
+          <Row noGutters style={{padding:"20px 0"}}>
+                {files && files.map(file=>(
+                    <Col xs={3} style={{padding:"10px",position:"relative"}}>
+                      <div  className="imgCard" style={{overflow:"hidden",height:"96.5px"}}>
+                        <Image className="img" fluid style={{minHeight:"100%",objectFit:"cover"}} onClick={()=>delImageHandler(file)} rounded src={URL.createObjectURL(file)}/>
+                      </div>
+                    </Col>
+                    ))}
+                </Row>
         </Modal.Body>
         <Modal.Footer>
             <Button onClick={handleUpload} >Submit</Button>
-          <Button onClick={props.onHide} >Close</Button>
+          <Button onClick={()=>{setFiles([]);props.onHide()}} >Close</Button>
         </Modal.Footer>
       </Modal>
          

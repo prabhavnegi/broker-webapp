@@ -1,0 +1,8 @@
+.imgCard:hover {
+    cursor: pointer;
+    background: linear-gradient( rgba(255, 0, 0, 0.45), rgba(255, 0, 0, 0.45))
+}
+
+.img:hover {
+    opacity: 0.3;
+}

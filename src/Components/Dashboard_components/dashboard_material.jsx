@@ -7,9 +7,11 @@ import Typography from '@material-ui/core/Typography';
 import EnhancedTableToolbar from './ClientList2';
 import SideDrawer from './sideDrawer';
 import PrimarySearchAppBar from './AppBarComponent';
+import Container from '@material-ui/core/Container';
 
 //backend imports
 import {auth,firestore,getUserDocument} from "../../firebase";
+import EnhancedPropTable from './PropertyList';
 
 const drawerWidth = 240;
 
@@ -125,13 +127,15 @@ const getUser =  async () => {
         <PrimarySearchAppBar avatar={user.photo_url} signOut={signOut}></PrimarySearchAppBar>
       </AppBar>
       
-      <SideDrawer ></SideDrawer>
+      <SideDrawer></SideDrawer>
+      <Container component="main" maxWidth="xl">
       <main className={classes.content}>
         <Toolbar />
-        {flag===1 ? <h1>No properties present. To upload click on Upload Folder</h1>:<h1></h1>}
+        {flag===1 ? <h1>No properties present. To upload click on Upload Folder</h1>:<h1>Card</h1>}
         <EnhancedTableToolbar></EnhancedTableToolbar>
-        
+        <EnhancedPropTable></EnhancedPropTable>
       </main>
+      </Container>
     </div>
   );
 }

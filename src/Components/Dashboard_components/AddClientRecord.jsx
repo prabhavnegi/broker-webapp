@@ -1,10 +1,18 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {Modal,Button} from 'react-bootstrap';
 import {Form} from 'react-bootstrap';
-
+import {generateClients} from '../../firebase';
 
 
 const AddClientRecord=(props)=>{
+  const [name,newname]=useState('');
+  const [phoneno,newphoneno]=useState('');
+
+  const submitter= async ()=>{
+    console.log("adding")
+     await generateClients(name,phoneno);
+  }
+
     return(
         <Modal
         {...props}
@@ -19,19 +27,19 @@ const AddClientRecord=(props)=>{
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Form.Group controlId="formBasicCurrent">
+            <Form.Group controlId="formBasicName">
               <Form.Label>Enter Client Name</Form.Label>
-              <Form.Control type="password" placeholder="Name of client" />
+              <Form.Control type="text" placeholder="Name of client" onChange={(event)=>{newname(event.target.value)}} />
             </Form.Group>
-            <Form.Group controlId="formBasicPassword">
+            <Form.Group controlId="formBasicNumber">
               <Form.Label>Enter Contact Number</Form.Label>
-              <Form.Control type="password" placeholder="Contact No of Client" />
+              <Form.Control type="tel" placeholder="Contact No of Client" onChange={(event)=>{newphoneno(event.target.value)}}/>
             </Form.Group>
           </Form>
                     
         </Modal.Body>
         <Modal.Footer>
-            <Button >Submit</Button>
+            <Button onClick={submitter}>Submit</Button>
           <Button onClick={props.onHide} >Cancel</Button>
         </Modal.Footer>
       </Modal>
