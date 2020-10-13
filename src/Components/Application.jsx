@@ -2,7 +2,7 @@ import React, {useEffect,useContext}from "react";
 import { BrowserRouter as Router, Route, Switch,Redirect} from "react-router-dom";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
-import ProfilePage from "./ProfilePage";
+import ProfilePage from "../Components/Dashboard_components/ProfilePage";
 import PasswordReset from "./PasswordReset";
 import EditProfile from "./EditProfile"
 import EditProp from "./EditProp";

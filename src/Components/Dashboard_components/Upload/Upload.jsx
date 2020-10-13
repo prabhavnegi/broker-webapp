@@ -1,5 +1,5 @@
 import React from "react";
-import {storage, generatePropDocument,auth} from "../../firebase";
+import {storage, generatePropDocument,auth} from "../../../firebase";
 import {useState} from 'react';
 import {Modal,Button,Form,Image,Row,Col} from 'react-bootstrap';
 import './Upload.css';

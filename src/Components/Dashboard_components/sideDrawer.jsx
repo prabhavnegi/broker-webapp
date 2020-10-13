@@ -14,7 +14,7 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import Sending from './Sending';
 import { Link } from 'react-router-dom';
-import Upload from './Upload';
+import Upload from '../Dashboard_components/Upload/Upload';
 import Edit_Profile from './EditProfile';
 import Change_Password from './ChangePassword';
 import AddClientRecord from './AddClientRecord';

@@ -54,7 +54,7 @@ const PasswordReset = () => {
     return (
       <Typography variant="body2" color="textSecondary" align="center">
         {'Copyright © '}
-        <Link color="inherit" href="/">
+        <Link color="inherit" to="/homepage">
           Broker.com
         </Link>{' '}
         {new Date().getFullYear()}

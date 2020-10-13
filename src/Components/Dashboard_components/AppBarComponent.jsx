@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
+import {auth,getUserDocument} from '../../firebase';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,6 +10,7 @@ import Menu from '@material-ui/core/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Avatar from '@material-ui/core/Avatar';
+import { Link } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -47,12 +49,22 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PrimarySearchAppBar(props) {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const avatar = props.avatar
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const signOut = props.signOut 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const [dp,setDp]=useState();
+
+useEffect(()=>{
+  getUser()
+},[])
+
+  const getUser =  async () => {
+    const user = auth.currentUser
+    const userDoc=await getUserDocument(user.uid)
+    setDp(userDoc.photo_url);
+    }
 
   const handleProfileMenuOpen = (event) => {
     console.log(event.currentTarget)
@@ -83,8 +95,8 @@ export default function PrimarySearchAppBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Account</MenuItem>
-      <MenuItem onClick={()=>{handleMenuClose();signOut()}}>Log Out</MenuItem>
+      <MenuItem onClick={handleMenuClose} component={Link} to="/ProfilePage">Account</MenuItem>
+      <MenuItem onClick={()=>{handleMenuClose();auth.signOut()}}>Log Out</MenuItem>
     </Menu>
   );
 
@@ -107,7 +119,7 @@ export default function PrimarySearchAppBar(props) {
           color="inherit"
           disabled
         >
-          <Avatar className={classes.avatar} src={avatar}/>
+          <Avatar className={classes.avatar} src={dp}/>
         </IconButton>
       </MenuItem>
         <MenuItem onClick={handleMobileMenuClose}>Account</MenuItem>
@@ -134,7 +146,7 @@ export default function PrimarySearchAppBar(props) {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <Avatar className={classes.avatar} src={avatar}/>
+              <Avatar className={classes.avatar} src={dp}/>
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>
