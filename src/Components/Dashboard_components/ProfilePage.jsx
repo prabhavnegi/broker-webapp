@@ -3,8 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import ImageDrawer from './ImageDrawer';
 import PrimarySearchAppBar from './AppBarComponent';
 import { useForm } from "react-hook-form";
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import { CssBaseline,AppBar,Link,Typography, Card, CardActions, CardContent,Divider, Button, Grid,Box, TextField } from '@material-ui/core';
+import {Link} from 'react-router-dom';
+import { CssBaseline,AppBar,Typography, Card, CardActions, CardContent,Divider, Button, Grid,Box, TextField,Container } from '@material-ui/core';
 import Change_Password from './ChangePassword';
 import Edit_Contact from './EditContact';
 import Edit_Email from './EditEmail';
@@ -94,7 +94,7 @@ const ProfilePage=()=> {
     return (
       <Typography variant="body2" color="textSecondary" align="center" >
         {'Copyright © '}
-        <Link color="inherit" href="/">
+        <Link color="inherit" to="/homepage">
           Broker.com
         </Link>{' '}
         {new Date().getFullYear()}
@@ -111,6 +111,8 @@ const ProfilePage=()=> {
   const [editemail,changeemail]=useState(false);
   const [editname,changename]=useState(false);
 
+  const [save,setSave]=useState(false)
+
   const [imgcrop,newimgcrop]=useState(false);
 
   useEffect(()=>{
@@ -122,7 +124,7 @@ const ProfilePage=()=> {
 	<Change_Password show={editpwd} onHide={() => changepwd(false)}/>
 	<Edit_Contact show={editph} onHide={() => changeph(false)}/>
 	<Edit_Email show={editemail} onHide={() => changeemail(false)}/>
-	<Edit_Name show={editname} onHide={() => changename(false)}/>
+	<Edit_Name show={editname}  onHide={() => {changename(false);setSave(true)}}/>
     <ImageCropper show={imgcrop} onHide={() => newimgcrop(false)}/>
       
       <CssBaseline />
@@ -132,8 +134,9 @@ const ProfilePage=()=> {
       
       <ImageDrawer></ImageDrawer>
       <main className={classes.content}>
-			<div className={classes.toolbar} />
-            <Card className={classes.card}>
+	  <Container component="main" maxWidth="md">
+		<div className={classes.toolbar} />
+            <Card className={classes.card} maxWidth="xs">
             <div className={classes.paper}>
 				<div className="card" style={{paddingLeft: "10px",paddingRight: "10px"}}>
 				<div className="card-block">
@@ -141,7 +144,8 @@ const ProfilePage=()=> {
 					<div className="card-body">
 						<div className="row justify-content-md-center">
 						<form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-							<Grid container spacing={2}>
+							<Container maxWidth="sm">
+							<Grid container spacing={4}>
                             <Grid item xs={12}>
                                 <Button
                                 variant="outlined"
@@ -196,6 +200,7 @@ const ProfilePage=()=> {
 								</Button>    
 							</Grid>
 						</Grid>
+						</Container>
 						</form>
 						</div>
 					</div>
@@ -203,20 +208,9 @@ const ProfilePage=()=> {
 				</div> 
 				</div>
 			</Card>
-				
-				
-				<Grid item xs={12}>
-					<Button
-					type="submit"
-					fullWidth
-					variant="contained"
-					color="primary"
-					className={classes.submit}
-					>
-					Save Changes 
-					</Button>
-				</Grid>
+				<br/>
                 <Copyright></Copyright>
+				</Container>
 				</main>
                 
   </div>

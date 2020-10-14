@@ -6,7 +6,6 @@ import Drawer from '@material-ui/core/Drawer';
 import Toolbar from '@material-ui/core/Toolbar';
 import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/avatar';
-import Grid from '@material-ui/core/Grid';
 import {List,ListItem,ListItemIcon,ListItemText} from '@material-ui/core';
 import PhoneIcon from '@material-ui/icons/Phone';
 import EmailIcon from '@material-ui/icons/Email';

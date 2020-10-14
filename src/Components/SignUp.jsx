@@ -61,7 +61,7 @@ const SignUp = () => {
     try{
       await signUpWithGoogle()
     }
-    catch (errro)
+    catch (error)
     {
       console.log(error)
     }
