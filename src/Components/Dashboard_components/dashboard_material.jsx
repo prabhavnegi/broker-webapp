@@ -4,11 +4,11 @@ import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import EnhancedTableToolbar from './ClientList2';
+/* import EnhancedTableToolbar from './ClientList2'; */
 import SideDrawer from './sideDrawer';
 import PrimarySearchAppBar from './AppBarComponent';
 import Container from '@material-ui/core/Container';
-
+import DataTable from './DataTable';
 //backend imports
 import {auth,firestore,getUserDocument} from "../../firebase";
 import EnhancedPropTable from './PropertyList';
@@ -132,7 +132,7 @@ const getUser =  async () => {
       <main className={classes.content}>
         <Toolbar />
         {flag===1 ? <h1>No properties present. To upload click on Upload Folder</h1>:<h1>Card</h1>}
-        <EnhancedTableToolbar></EnhancedTableToolbar>
+        <DataTable></DataTable>
         <EnhancedPropTable></EnhancedPropTable>
       </main>
       </Container>

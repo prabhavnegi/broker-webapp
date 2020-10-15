@@ -10,8 +10,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
 import FolderIcon from '@material-ui/icons/Folder';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import BorderColorIcon from '@material-ui/icons/BorderColor';
+
 import Sending from './Sending';
 import { Link } from 'react-router-dom';
 import Upload from '../Dashboard_components/Upload/Upload';

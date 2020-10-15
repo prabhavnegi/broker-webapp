@@ -111,7 +111,6 @@ const ProfilePage=()=> {
   const [editemail,changeemail]=useState(false);
   const [editname,changename]=useState(false);
 
-  const [save,setSave]=useState(false)
 
   const [imgcrop,newimgcrop]=useState(false);
 
@@ -124,7 +123,7 @@ const ProfilePage=()=> {
 	<Change_Password show={editpwd} onHide={() => changepwd(false)}/>
 	<Edit_Contact show={editph} onHide={() => changeph(false)}/>
 	<Edit_Email show={editemail} onHide={() => changeemail(false)}/>
-	<Edit_Name show={editname}  onHide={() => {changename(false);setSave(true)}}/>
+	<Edit_Name show={editname}  onHide={() => changename(false)}/>
     <ImageCropper show={imgcrop} onHide={() => newimgcrop(false)}/>
       
       <CssBaseline />

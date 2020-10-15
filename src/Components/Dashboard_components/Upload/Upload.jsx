@@ -65,8 +65,9 @@ const handleUpload = e => {
              );
            });
        Promise.all(promises)
-        .then(() => alert('All files uploaded'))
+        .then(() => {alert('All files uploaded');props.onHide();})
         .catch(err => console.log(err.code));
+        
  }
 
   const updateDoc= (url) => {
@@ -128,7 +129,7 @@ const handleUpload = e => {
         </Modal.Body>
         <Modal.Footer>
             <Button onClick={handleUpload} >Submit</Button>
-          <Button onClick={()=>{setFiles([]);props.onHide()}} >Close</Button>
+          <Button onClick={()=>{setFiles([])}} >Close</Button>
         </Modal.Footer>
       </Modal>
          

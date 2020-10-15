@@ -13,6 +13,7 @@ import Pdf from "./Pdf";
 import {UserContext} from "../UserProvider/provider";
 import ClippedDrawer from './Dashboard_components/dashboard_material';
 import HomePage from './HomePage';
+import Sending from '../Components/Dashboard_components/Sending';
 
 
 
@@ -38,6 +39,7 @@ function App() {
               <Route path="/Pdf" exact component={Pdf}/>
               <Route path="/homepage" exact component={HomePage}/>
               <Route path="/EditProfile/updateProfile" exact component={ImmageCropper}/>
+              <Route path="/Sending" exact component={Sending} />
               <Route path="/dash" render={props=>{
                 return isLoading?"":userData?<ClippedDrawer {...props}/> : <Redirect to="/"/>
               }}/>

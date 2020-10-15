@@ -23,8 +23,19 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 
 import {auth,firestore} from '../../firebase';
 
+function createData(name, phno) {
+    return { name, phno };
+}
 
-let rows=[]
+
+const rows = [
+    createData('Client1 ', 9898989898),
+    createData('Client2', 8989898989),
+    createData('Client3 ', 98989189898),
+    createData('Client4', 8989898989),
+    createData('Client5 ', 9898989898),
+    createData('Client6', 82989898989),
+];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -135,21 +146,6 @@ const EnhancedTableToolbar = (props) => {
 
   const [data,setData]=useState();
   const [flag,setFlag]=useState();
-  const [row,setRows]=useState();
-
-
-const createRows=()=>{
-  console.log(data)
-  flag? data.clients.map((c,index)=>{
-    var name=c.name
-    var phoneno=c.phoneno
-    var y=[name,phoneno]
-    setRows(rows=>({...rows,y}))
-    console.log("row set")
-  })
-  :""
-  rows=row;
-}
 
   const getClients =  async () => {
     const user = auth.currentUser;
@@ -166,8 +162,7 @@ const createRows=()=>{
 
   useEffect(()=>{
     getClients();
-    createRows();
-  },[row])
+  },[])
 
 
   return (

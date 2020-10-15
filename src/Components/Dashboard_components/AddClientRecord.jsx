@@ -11,6 +11,7 @@ const AddClientRecord=(props)=>{
   const submitter= async ()=>{
     console.log("adding")
      await generateClients(name,phoneno);
+     props.onHide();
   }
 
     return(
