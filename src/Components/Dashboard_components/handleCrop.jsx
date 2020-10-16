@@ -26,7 +26,7 @@ const HandleCrop = (props) => {
     return (
        <div> 
         <div>
-            <img ref={imageElement} src={props.url} alt="profilePic"/>
+            <img ref={imageElement} style={{height:"auto",width:"100%"}}src={props.url} alt="profilePic"/>
         </div>
     </div>
         
