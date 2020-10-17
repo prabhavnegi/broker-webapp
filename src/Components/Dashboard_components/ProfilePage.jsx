@@ -104,7 +104,7 @@ const ProfilePage=()=> {
   }
   
   const classes = useStyles();
-  const { handleSubmit, register, errors } = useForm();
+  const { handleSubmit} = useForm();
   const onSubmit = values => console.log(values);
   const [editpwd,changepwd]=useState(false);
   const [editph,changeph]=useState(false);
@@ -153,7 +153,7 @@ const ProfilePage=()=> {
                                 variant="contained"
                                 onClick={()=>newimgcrop(true)}
                                 >
-                                    Upload Photo
+									Edit profile picture`
                                 </Button>
                             </Grid>
 							<Grid item xs={12}>

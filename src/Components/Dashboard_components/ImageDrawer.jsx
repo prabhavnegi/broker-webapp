@@ -10,6 +10,8 @@ import {List,ListItem,ListItemIcon,ListItemText} from '@material-ui/core';
 import PhoneIcon from '@material-ui/icons/Phone';
 import EmailIcon from '@material-ui/icons/Email';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import DashboardIcon from '@material-ui/icons/Dashboard';
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 260;
 
@@ -110,6 +112,12 @@ const ImageDrawer=()=>{
             </List>
                 
             <Divider />
+            <List>
+              <ListItem button key='Dashboard' component={Link} to="/dash">
+                <ListItemIcon><DashboardIcon /></ListItemIcon>
+                <ListItemText primary='Dashboard' />
+              </ListItem>
+            </List>
         </div>
       </Drawer>
     );
