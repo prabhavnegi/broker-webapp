@@ -124,7 +124,7 @@ const getUser =  async () => {
             Dashboard
           </Typography>
         </Toolbar> */}
-        <PrimarySearchAppBar avatar={user.photo_url} signOut={signOut}></PrimarySearchAppBar>
+        <PrimarySearchAppBar dp={user.photo_url} avatar={user.photo_url} signOut={signOut}></PrimarySearchAppBar>
       </AppBar>
       
       <SideDrawer></SideDrawer>

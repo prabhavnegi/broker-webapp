@@ -51,7 +51,7 @@ const getClients =  async () => {
       setFlag(true)
     }
     else
-      alert("No clients")
+      console.log("no clients")
   }
 
   const delClient=async(n)=>{

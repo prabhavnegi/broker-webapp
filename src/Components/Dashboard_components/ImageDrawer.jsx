@@ -1,6 +1,5 @@
 import React,{useEffect, useState} from 'react';
 import {auth,getUserDocument} from '../../firebase';
-
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -51,27 +50,9 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
   
-const ImageDrawer=()=>{
-    useEffect(()=>{
-        getUser()
-    },[])
-
-    const [name,setName]=useState();
-    const [email,setEmail]=useState();
-    const [phno,setPhno]=useState();
-    const [dp,setDp]=useState();
-
+const ImageDrawer=(props)=>{
+   
     const classes = useStyles();
-
-  const getUser =  async () => {
-    const user = auth.currentUser
-     const userDoc=await getUserDocument(user.uid)
-    setName(userDoc.displayName);
-    setEmail(userDoc.email);
-    setPhno(userDoc.phno);
-    setDp(userDoc.photo_url);
-    }
-
 
     return(
         <Drawer
@@ -86,7 +67,7 @@ const ImageDrawer=()=>{
         <div className={classes.drawerContainer}>
             <Divider />
 				<center>
-					<Avatar src={dp} className={classes.avatar} />
+					<Avatar src={props.UserData.dp} className={classes.avatar} />
 						<p>
 						{' '}
 						
@@ -99,15 +80,15 @@ const ImageDrawer=()=>{
                 
                 <ListItem button key={'Name'}>
                     <ListItemIcon><AccountCircleIcon /></ListItemIcon>
-                    <ListItemText primary={name} style={{fontSize: "20px"}}/>
+                    <ListItemText primary={props.UserData.name} style={{fontSize: "20px"}}/>
                 </ListItem>
                 <ListItem button key={'Email'}>
                     <ListItemIcon><EmailIcon /></ListItemIcon>
-                    <ListItemText primary={email} style={{fontSize: "5px"}}/>
+                    <ListItemText primary={props.UserData.email} style={{fontSize: "5px"}}/>
                 </ListItem>
                 <ListItem button key={'Contact'}>
                     <ListItemIcon><PhoneIcon /></ListItemIcon>
-                    <ListItemText primary={phno} style={{fontSize: "20px"}}/>
+                    <ListItemText primary={props.UserData.phno} style={{fontSize: "20px"}}/>
                 </ListItem>
             </List>
                 

@@ -18,11 +18,11 @@ const EditProfile = () => {
     const [isLoading,setLoading] = useState(false); 
     const [emailflag,setEmailflag]=useState(false)
     const [userpass,setUserpass]=useState("")
-    const [newProfile,setNewProfile] = useState();
     let history = useHistory();
 
 
     const getUser = async () => {
+        console.log("hello")
         const user = auth.currentUser
         const userDoc = await generateUserDocument(user,{},"edit")
         setDp(userDoc.displayName)

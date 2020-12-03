@@ -35,6 +35,7 @@ const Edit_Name=(props)=>{
         setError("Inputs cannot be same")
         return;
       }
+      props.onHide()
       setSuccess("Name updated")
       
     }

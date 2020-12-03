@@ -10,6 +10,7 @@ import Edit_Contact from './EditContact';
 import Edit_Email from './EditEmail';
 import Edit_Name from './EditName';
 import ImageCropper from './imageCropper';
+import {auth,getUserDocument} from '../../firebase';
 
 
 const drawerWidth = 240;
@@ -105,17 +106,32 @@ const ProfilePage=()=> {
   
   const classes = useStyles();
   const { handleSubmit} = useForm();
-  const onSubmit = values => console.log(values);
+  const onSubmit = values => {};
   const [editpwd,changepwd]=useState(false);
   const [editph,changeph]=useState(false);
   const [editemail,changeemail]=useState(false);
   const [editname,changename]=useState(false);
-
-
   const [imgcrop,newimgcrop]=useState(false);
 
+
   useEffect(()=>{
-  },[editname,editemail,editph,editpwd,imgcrop])
+	getUser()
+},[editemail,editname,editpwd,editph,imgcrop])
+
+const [name,setName]=useState("");
+const [email,setEmail]=useState("");
+const [phno,setPhno]=useState("");
+const [dp,setDp]=useState("");
+
+const getUser =  async () => {
+	console.log("hello brother")
+	const user = auth.currentUser
+	const userDoc=await getUserDocument(user.uid)
+	setName(userDoc.displayName);
+	setEmail(userDoc.email);
+	setPhno(userDoc.phno);
+	setDp(userDoc.photo_url);
+}
 
   return (
     
@@ -128,10 +144,10 @@ const ProfilePage=()=> {
       
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
-        <PrimarySearchAppBar></PrimarySearchAppBar>
+        <PrimarySearchAppBar dp={dp}></PrimarySearchAppBar>
       </AppBar>
       
-      <ImageDrawer></ImageDrawer>
+      <ImageDrawer UserData={{name,email,phno,dp}}></ImageDrawer>
       <main className={classes.content}>
 	  <Container component="main" maxWidth="md">
 		<div className={classes.toolbar} />
@@ -153,7 +169,7 @@ const ProfilePage=()=> {
                                 variant="contained"
                                 onClick={()=>newimgcrop(true)}
                                 >
-									Edit profile picture`
+									Edit profile picture
                                 </Button>
                             </Grid>
 							<Grid item xs={12}>
