@@ -1,335 +1,184 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { lighten, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import React, { useEffect,useState } from "react";
+import { useHistory } from "react-router";
+import {auth,firestore,getUserDocument,storageDel} from '../../firebase';
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import  TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
+import Checkbox from "@material-ui/core/Checkbox";
+import { Divider } from "@material-ui/core";
+import EditPropertyList from './EditPropertyList';
+import ViewProperty from './ViewProperty';
 
-function createData(pname, addr) {
-    return { pname, addr };
-}
-
-const rows = [
-    createData('P1 ', 'A1'),
-    createData('P2', 'A2'),
-    createData('P3 ', 'A3'),
-    createData('P4', 'A4'),
-    createData('P5 ', 'A5'),
-    createData('P6', 'A6'),
-];
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
-const headCells = [
-  { id: 'name', numeric: false, disablePadding: true, label: 'Property Name' },
-  { id: 'phno', numeric: false, disablePadding: false, label: 'Address' },
-];
-
-function EnhancedTableHead(props) {
-  const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-  return(
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ 'aria-label': 'select all desserts' }}
-          />
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'left' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'default'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'desc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-EnhancedTableHead.propTypes = {
-  classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
-
-const useToolbarStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
+    width: "100%",
+    marginTop: "20px",
+    overflowX: "auto",
+    marginBottom: "20px"
   },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
-  title: {
-    flex: '1 1 100%',
+  tbhead: {
+      fontSize: "20px",
+      marginTop: "2px",
+      marginLeft: "10px"
   },
-}));
+  Checkbox: {
+      marginLeft: "25px"
+  }
+});
 
-const EnhancedTableToolbar = (props) => {
-  const classes = useToolbarStyles();
-  const { numSelected } = props;
+const DataTable=()=> {
+    const classes = useStyles();
 
-  return (
-    <Toolbar
-      className={clsx(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
-    >
-      {numSelected > 0 ? (
-        <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          Property List
-        </Typography>
-      )}
+    const [docs,setDocs]=useState([]);
+    const [flag,setFlag]=useState();
+    const [user,setUser]=useState();
+    const [pName,setPName]=useState();
+    const [propDetails,setPropDetails] = useState({name:"",address:"",URL:[]})
+    const [editDetails, showeditDetails] = useState(false);
+    const [showImage,newshowImage] = useState(false);
+    const history=useHistory();
 
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-};
+    const selected=new Set();
+    
+    useEffect(()=>{
+        getProps();
+    },[user])
 
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
+const getProps =  async () => {
+    const user = auth.currentUser
+     const userDoc=await getUserDocument(user.uid)
+    setUser(userDoc)
+    const userRef = firestore.collection('users');
+    const properties =  await userRef.doc(`${user.uid}`).collection('property_details').get()
+    if(properties.docs.length)
+      {
+        var arr=[];
+        properties.docs.map(p => {
+          const z = p.data()
+          arr=[...arr,z];
+        })
+        setDocs(docs=>arr)
+        setFlag(true)
+      }
+      else{
+        setFlag(false)
+        alert("No properties")
+      }
+  }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-  },
-  paper: {
-    width: '100%',
-    marginBottom: theme.spacing(2),
-  },
-  table: {
-    minWidth: 750,
-  },
-  visuallyHidden: {
-    border: 0,
-    clip: 'rect(0 0 0 0)',
-    height: 1,
-    margin: -1,
-    overflow: 'hidden',
-    padding: 0,
-    position: 'absolute',
-    top: 20,
-    width: 1,
-  },
-}));
+  const checkboxChange=(e)=>{
+    console.log(e.currentTarget.checked)
+    if(e.currentTarget.checked)
+        selected.add(e.currentTarget.value);
+    else
+        selected.delete(e.currentTarget.value);
+  }
 
-export default function EnhancedPropTable() {
-  const classes = useStyles();
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const setProps=()=>{
+    console.log(selected.size)
+    selected.forEach(p => {
+      console.log(p)
+    })
+  }
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+  const delProp=async(propName)=>{
+    const user= auth.currentUser;
+    const docRef = firestore.collection('users').doc(user.uid).collection('property_details').doc(propName);
+    docRef.delete().then(function() {
+        console.log("Property successfully deleted!");
+    }).catch(function(error) {
+        console.error("Error removing property: ", error);
+    });
+    storageDel(propName);
+    await getProps()
+  }
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
+  const selectallBox=(e)=>{
+    if(e.currentTarget.checked)
+    {
+      docs.map((c,index)=>
+      selected.add(c.name)
+      )
     }
-    setSelected([]);
-  };
+    else{
+    selected.forEach(p => {
+      selected.delete(p)
+    })
+  }
+}
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
+    return (
+      <Paper className={classes.root}>
+          {flag?
+        <Table className={classes.table}>
+            <TableHead>
+            <TableRow>
+            <TableCell><b><p style={{marginTop: "10px"}}>Property List</p></b>
+            </TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
+            <TableCell>
+              <Button
+                variant="contained"
+                onClick={()=>{setProps()}}
+                color="primary"
+              style={{marginLeft: "135px",marginRight: "-20px"}}
+              >Select</Button>
+                  </TableCell>
+            </TableRow>
+            </TableHead>
+          <TableHead>
+          <Divider />
+          <EditPropertyList show={editDetails} getProps={getProps} pName={pName} onHide={()=>showeditDetails(false)}/>
+          <ViewProperty show={showImage}  propDetails={propDetails} onHide={()=>newshowImage(false)}></ViewProperty>
+            <TableRow checkboxselection>
+              <TableCell><Checkbox value="selectall" onChange={selectallBox} style={{marginLeft: "25px",marginTop: "10px"}}></Checkbox></TableCell>
+              <TableCell>Property Name</TableCell>
+              <TableCell>Address</TableCell>
+              <TableCell>Actions</TableCell>
+              
+            </TableRow>
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const isSelected = (name) => selected.indexOf(name) !== -1;
-
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
-  return (
-    <div className="row justify-content-md-center">
-    <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
-          <Table
-            className={classes.table}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-            aria-label="enhanced table"
-          >
-          
-            <EnhancedTableHead
-              classes={classes}
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
-                  return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.name)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.name}
-                      selected={isItemSelected}
+            
+          </TableHead>
+          <TableBody>
+            {docs.map((c,index) => {
+              return (
+                <TableRow key={`row-${index}`}>
+                  <TableCell><Checkbox value={c.address} onChange={checkboxChange} style={{marginLeft: "25px",marginTop: "10px"}}></Checkbox></TableCell>
+                  <TableCell>{c.name}</TableCell>
+                  <TableCell>{c.address}</TableCell>
+                  <TableCell>
+                    <Button
+                    onClick={()=>{newshowImage(true);setPropDetails(c)}}
+                    color="secondary">
+                      View
+                    </Button>
+                    <Button
+                    color="secondary"
+                    onClick={()=>{showeditDetails(true);setPName(c.name)}}
                     >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ 'aria-labelledby': labelId }}
-                        />
-                      </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.pname}
-                      </TableCell>
-                      <TableCell align="left">{row.addr}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                  <TableCell colSpan={6} />
+                      Edit
+                    </Button>
+                    <Button
+                      onClick={()=>{let nm=c.name;delProp(nm)}}
+                      color="secondary"
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
+              );
+            })}
+          </TableBody>
+        </Table>:""}
       </Paper>
-    </div>
-    </div>
-  );
-}
+    );
+  }
+
+export default DataTable;

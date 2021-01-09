@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   }
 });
 
-const DataTable=()=> {
+const ClientList=()=> {
     const classes = useStyles();
 
     const [data,setData]=useState();
@@ -50,8 +50,10 @@ const getClients =  async () => {
       setData(client.data())
       setFlag(true)
     }
-    else
-      alert("No clients")
+    else{
+      setFlag(false);
+      console.log("No clients")
+    }
   }
 
   const delClient=async(n)=>{
@@ -66,11 +68,10 @@ const getClients =  async () => {
   await  userRef.update({
       clients:data.clients
     })
-    getClients()
+    await getClients()
   }
 
   const checkboxChange=(e)=>{
-    console.log(e.currentTarget.checked)
     if(e.currentTarget.checked)
         selected.add(e.currentTarget.value);
     else
@@ -78,6 +79,7 @@ const getClients =  async () => {
   }
 
   const setClients=()=>{
+    console.log(selected.size)
     selected.forEach(client => {
       console.log(client)
     })
@@ -91,23 +93,18 @@ const getClients =  async () => {
         <Table className={classes.table}>
             <TableHead>
             <TableRow>
-            <TableCell>
-                Client List
+            <TableCell><b><p style={{marginTop: "10px"}}>Client List</p></b>
             </TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
             <TableCell>
-            <Button
-              variant="contained"
+              <Button
+                variant="contained"
+                onClick={()=>{setClients()}}
                 color="primary"
-                style={{float: "right",left: "400px"}}
-                onClick={()=>{setClients()}
-            }
-            >
-            Select
-            </Button>
-            </TableCell><Divider /><Divider />
-            
+              >Select</Button>
+                  </TableCell>
             </TableRow>
-
             </TableHead>
           <TableHead>
           <Divider />
@@ -145,4 +142,4 @@ const getClients =  async () => {
     );
   }
 
-export default DataTable;
+export default ClientList;

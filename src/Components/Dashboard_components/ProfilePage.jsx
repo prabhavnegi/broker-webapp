@@ -10,7 +10,7 @@ import Edit_Contact from './EditContact';
 import Edit_Email from './EditEmail';
 import Edit_Name from './EditName';
 import ImageCropper from './imageCropper';
-
+import {auth,getUserDocument} from '../../firebase';
 
 const drawerWidth = 240;
 
@@ -89,6 +89,31 @@ submitButton: {
 
 const ProfilePage=()=> {
 
+	const [name,setName]=useState();
+    const [email,setEmail]=useState();
+    const [phno,setPhno]=useState();
+    const [dp,setDp]=useState();
+	const [loading,setLoading] = useState(true);
+
+
+	const getUser =  async () => {
+			const user = auth.currentUser
+			const userDoc=await getUserDocument(user.uid)
+			setName(userDoc.displayName);
+			setEmail(userDoc.email);
+			setPhno(userDoc.phno);
+			setDp(userDoc.photo_url);
+			setLoading(false)
+		}
+	
+	
+	useEffect(()=>{
+
+			getUser()
+
+	},[])
+
+
   var flag=1;
   function Copyright() {
     return (
@@ -105,7 +130,7 @@ const ProfilePage=()=> {
   
   const classes = useStyles();
   const { handleSubmit} = useForm();
-  const onSubmit = values => console.log(values);
+  const onSubmit = values => {};
   const [editpwd,changepwd]=useState(false);
   const [editph,changeph]=useState(false);
   const [editemail,changeemail]=useState(false);
@@ -115,23 +140,24 @@ const ProfilePage=()=> {
   const [imgcrop,newimgcrop]=useState(false);
 
   useEffect(()=>{
+	  getUser()
   },[editname,editemail,editph,editpwd,imgcrop])
 
   return (
-    
+    loading?"":
     <div className={classes.root}>
-	<Change_Password show={editpwd} onHide={() => changepwd(false)}/>
-	<Edit_Contact show={editph} onHide={() => changeph(false)}/>
-	<Edit_Email show={editemail} onHide={() => changeemail(false)}/>
-	<Edit_Name show={editname}  onHide={() => changename(false)}/>
-    <ImageCropper show={imgcrop} onHide={() => newimgcrop(false)}/>
+	<Change_Password getUser={getUser} show={editpwd} onHide={() => changepwd(false)}/>
+	<Edit_Contact getUser={getUser} show={editph} onHide={() => changeph(false)}/>
+	<Edit_Email  getUser={getUser} show={editemail} onHide={() => changeemail(false)}/>
+	<Edit_Name getUser={getUser} show={editname}  onHide={() => changename(false)}/>
+    <ImageCropper getUser={getUser} show={imgcrop} onHide={() => newimgcrop(false)}/>
       
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
-        <PrimarySearchAppBar></PrimarySearchAppBar>
+        <PrimarySearchAppBar dp={dp}></PrimarySearchAppBar>
       </AppBar>
       
-      <ImageDrawer></ImageDrawer>
+      <ImageDrawer UserData={{name,email,phno,dp}}></ImageDrawer>
       <main className={classes.content}>
 	  <Container component="main" maxWidth="md">
 		<div className={classes.toolbar} />

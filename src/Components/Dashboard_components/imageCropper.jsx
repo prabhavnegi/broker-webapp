@@ -8,7 +8,7 @@ const ImageCropper = (props) => {
         const [image,setImage] = useState();
         const [cropImg,setCropImg] = useState()
         const [name,setName] = useState()
-
+        const [disable,setDisable] = useState(false);
 
         const getImage = (e) => {
           setName(e.target.files[0].name)
@@ -18,8 +18,11 @@ const ImageCropper = (props) => {
 
         const handleUpload = () => {
           console.log(cropImg)
+          if(!image)
+            props.onHide();
+          setDisable(true)
           updateProfile(cropImg,name).then(()=>{
-             window.alert("profile Updated")
+             setDisable(false)
              props.onHide();
           }).catch(err=>{
              console.log(err.message)
@@ -47,8 +50,8 @@ const ImageCropper = (props) => {
           <Button variant="secondary" onClick={props.onHide}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleUpload}>
-            Save Changes
+          <Button variant="primary" disabled={disable} onClick={handleUpload}>
+            {disable?"Uploading":"Save"}
           </Button>
         </Modal.Footer>
         </Modal>

@@ -54,17 +54,6 @@ export default function PrimarySearchAppBar(props) {
   const signOut = props.signOut 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const [dp,setDp]=useState();
-
-useEffect(()=>{
-  getUser()
-},[])
-
-  const getUser =  async () => {
-    const user = auth.currentUser
-    const userDoc=await getUserDocument(user.uid)
-    setDp(userDoc.photo_url);
-    }
 
   const handleProfileMenuOpen = (event) => {
     console.log(event.currentTarget)
@@ -119,7 +108,7 @@ useEffect(()=>{
           color="inherit"
           disabled
         >
-          <Avatar className={classes.avatar} src={dp}/>
+          <Avatar className={classes.avatar} src={props.dp}/>
         </IconButton>
       </MenuItem>
         <MenuItem onClick={handleMobileMenuClose}>Account</MenuItem>
@@ -146,7 +135,7 @@ useEffect(()=>{
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <Avatar className={classes.avatar} src={dp}/>
+              <Avatar className={classes.avatar} src={props.dp}/>
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>

@@ -11,6 +11,8 @@ import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import SideDrawer from './sideDrawer';
 import { useForm } from "react-hook-form";
+import SelectClient from './SelectClient';
+import SelectProperty from './SelectProperty';
 
 const drawerWidth = 240;
 
@@ -50,43 +52,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 var itemList=[];
 
-/* async componentDidMount() {
-  const res=await getter();
-  console.log('in card');
-    console.log(itemList[0]);
-    return(
-      <Card>
-        <image src={itemList[0].photourl} alt="not loading  "></image>
-        
-      </Card>
-    );
-} */
-
-
-/* 
-const getter=()=> {
-  console.log('hi');
-   Axios.get('http://localhost:5000')
-  .then((res =>{
-    console.log(res.data);
-    var x=res.data;
-    itemList.append(x);
-  }));
-}
-
-
-useEffect(() => {
-  getter();
-  console.log('in card');
-    console.log(itemList[0]);
-    return(
-      <Card>
-        <image src={itemList[0].photourl} alt="not loading  "></image>
-        
-      </Card>
-    );
-});
- */
 const Sending=()=> {
 
   var flag=1;
@@ -106,10 +71,12 @@ const Sending=()=> {
   const [modalShow,setModalShow]=useState(false);
   const [edit,editProfile]=useState(false);
   const [editpwd,changepwd]=useState(false);
-  const [addclient,newaddclient]=useState(false);
+  const [showClient,newshowclient]=useState(false);
+  const [showProperty,newshowProperty]=useState(false);
   const classes = useStyles();
   const { handleSubmit, register, errors } = useForm();
   const onSubmit = values => console.log(values);
+
   return (
     <div className={classes.root}>
   
@@ -122,6 +89,8 @@ const Sending=()=> {
           </Typography>
         </Toolbar>
       </AppBar>
+      <SelectClient show={showClient} onHide={() => newshowclient(false)}/>
+      <SelectProperty show={showProperty} onHide={() => newshowProperty(false)}/>
       
       <SideDrawer ></SideDrawer>
       <main className={classes.content}>
@@ -141,9 +110,11 @@ const Sending=()=> {
                         variant="outlined"
                         type="submit"
                         fullWidth
-                        variant="contained">
+                        variant="contained"
+                        onClick={()=>newshowclient(true)}>
                         Select Client From Record
                         </Button>
+                      
                       </Grid>
                     
                       <Grid item xs={12}>
@@ -152,6 +123,7 @@ const Sending=()=> {
                         type="submit"
                         fullWidth
                         variant="contained"
+                        onClick={()=>newshowProperty(true)}
                         >Select Property From Record
                         </Button>    
                       </Grid>

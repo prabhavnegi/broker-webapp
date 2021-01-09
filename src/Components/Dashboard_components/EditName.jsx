@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import {Modal,Button} from 'react-bootstrap';
 import {Form} from 'react-bootstrap';
-import {getUserDocument, updateUserInfo} from '../../firebase';
+import {updateUserInfo} from '../../firebase';
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -28,15 +28,17 @@ const Edit_Name=(props)=>{
       setName(e.target.value)
     }
 
-    const handleSubmit=()=>{
+    const handleSubmit=async ()=>{
       try{
-        updateUserInfo(name);
+          await updateUserInfo(name);
+          setSuccess("Name updated")
       } catch(error){
         setError("Inputs cannot be same")
         return;
       }
+      props.onHide()
       setSuccess("Name updated")
-      
+       
     }
 
     const classes=useStyles();

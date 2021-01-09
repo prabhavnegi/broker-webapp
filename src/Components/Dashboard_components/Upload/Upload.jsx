@@ -9,12 +9,11 @@ import './Upload.css';
 const Upload= (props) => {
  
   const [progress,setProgress] = useState(0);
-  const [property,setProperty] = useState();
-  const [addr,setAddr]=useState("");
+  const [property,setProperty] = useState(props.pName);
+  const [addr,setAddr]=useState(props.pAddr);
   const [files, setFiles] = useState([])
 
   const user = auth.currentUser
-  
 
   const handleChange = e => {
     for (let i = 0; i < e.target.files.length; i++) {
@@ -65,7 +64,7 @@ const handleUpload = e => {
              );
            });
        Promise.all(promises)
-        .then(() => {alert('All files uploaded');props.onHide();})
+        .then(() => {alert('All files uploaded');props.getUser();props.onHide();setAddr();setFiles([]);setProgress(0);setProperty();})
         .catch(err => console.log(err.code));
         
  }
@@ -99,7 +98,12 @@ const handleUpload = e => {
         <Modal.Body>
           <h4>Upload Property Here</h4>
           <Form>
-            
+            {props.pName ? 
+            <div>
+            <h2>Property Name:{props.pName}</h2>
+            <h4>Property Address:{props.pAddr}</h4>
+            </div>
+            :
             <div>
             <Form.Group controlId="formBasicEmail">
             <Form.Label>Property Name</Form.Label>
@@ -110,6 +114,7 @@ const handleUpload = e => {
               <Form.Control type="text" placeholder="Address" onChange={handleAddr} value={addr}/>
             </Form.Group>
             </div>
+            }
             <Form.Group controlId="formBasicPassword">
               <input type="file" multiple onChange={handleChange} />
             </Form.Group>
