@@ -291,7 +291,6 @@ export const updatePropInfo = async(addr, id) => {
 export const generateClients = async(name, phoneno) => {
     var user = auth.currentUser;
     if (!user) return;
-    console.log("hello")
     const userRef = db.collection('users').doc(user.uid).collection('clients').doc(user.uid + "clients");
     const snapshot = await userRef.get();
     if (!snapshot.exists) {

@@ -6,7 +6,7 @@ import ProfilePage from "../Components/Dashboard_components/ProfilePage";
 import PasswordReset from "./PasswordReset";
 import EditProfile from "./EditProfile"
 import EditProp from "./EditProp";
-import AddClient from "./AddClient"; 
+//import AddClient from "./AddClient"; 
 import ImmageCropper from"./imageCropper";
 import SignInSwitch from "./signInSwitch";
 import Pdf from "./Pdf";
@@ -35,7 +35,6 @@ function App() {
               <Route path="/signIn" exact component={SignInSwitch}/>
               <Route path="/passwordReset" exact component={PasswordReset}/>
               <Route path="/EditProp/:id" component={EditProp}/>
-              <Route path="/Clients"  exact component={AddClient}/>
               <Route path="/Pdf" exact component={Pdf}/>
               <Route path="/homepage" exact component={HomePage}/>
               <Route path="/EditProfile/updateProfile" exact component={ImmageCropper}/>

@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   }
 });
 
-const DataTable=()=> {
+const DataTable=(props)=> {
     const classes = useStyles();
 
     const [docs,setDocs]=useState([]);
@@ -43,9 +43,11 @@ const DataTable=()=> {
     
     useEffect(()=>{
         getProps();
-    },[])
+        console.log("prop list use effect")
+    },[props.updater])
 
 const getProps =  async () => {
+    console.log("prop list")
     const user = auth.currentUser
     const userRef = firestore.collection('users');
     const properties =  await userRef.doc(`${user.uid}`).collection('property_details').get()

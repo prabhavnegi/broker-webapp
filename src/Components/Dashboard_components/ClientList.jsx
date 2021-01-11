@@ -9,7 +9,6 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
-import { Divider } from "@material-ui/core";
 
 const useStyles = makeStyles({
   root: {
@@ -28,7 +27,7 @@ const useStyles = makeStyles({
   }
 });
 
-const ClientList=()=> {
+const ClientList=(props)=> {
     const classes = useStyles();
 
     const [data,setData]=useState();
@@ -38,14 +37,14 @@ const ClientList=()=> {
     
     useEffect(()=>{
         getClients();
-    },[])
+    },[props.clientUpdate])
 
 const getClients =  async () => {
     const user = auth.currentUser;
     const userRef = firestore.collection('users');
     const client=await userRef.doc(user.uid).collection('clients').doc(user.uid+"clients").get()
     console.log("clientList")
-    if(client.data())
+    if(client.data().clients.length)
     {
       setData(client.data())
       setFlag(true)
@@ -88,8 +87,9 @@ const getClients =  async () => {
 
 
     return (
+      <div>
+      {flag?
       <Paper className={classes.root}>
-          {flag?
         <Table className={classes.table}>
             <TableHead>
             <TableRow>
@@ -107,8 +107,7 @@ const getClients =  async () => {
             </TableRow>
             </TableHead>
           <TableHead>
-          <Divider />
-            <TableRow checkboxselection>
+            <TableRow checkboxselection="true">
               <TableCell><Checkbox value="selectall" style={{marginLeft: "25px",marginTop: "10px"}}></Checkbox></TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Contact No.</TableCell>
@@ -137,8 +136,11 @@ const getClients =  async () => {
               );
             })}
           </TableBody>
-        </Table>:""}
+        </Table>
       </Paper>
+      : <div style={{marginTop:"4%",marginBottom:"4%",padding:"15px",backgroundColor:"white",borderRadius:"5px",boxShadow:"3px 3px 5px rgba(0, 0, 0, 0.4)"}}>
+        <h3 style={{ margin:"0",textAlign:"center"}}>No clients to show</h3></div>}
+      </div>
     );
   }
 

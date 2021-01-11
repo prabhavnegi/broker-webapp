@@ -9,13 +9,13 @@ import './Upload.css';
 const Upload= (props) => {
  
   const [progress,setProgress] = useState(0);
-  const [property,setProperty] = useState(props.pName);
-  const [addr,setAddr]=useState(props.pAddr);
+  const [property,setProperty] = useState(props.pName||"");
+  const [addr,setAddr]=useState(props.pAddr||"");
   const [disable,setDisable] = useState(false)
   const [files, setFiles] = useState([])
 
   const user = auth.currentUser
-
+  
   const handleChange = e => {
     for (let i = 0; i < e.target.files.length; i++) {
       const newFile = e.target.files[i];
@@ -69,7 +69,7 @@ const handleUpload = e => {
              );
            });
        Promise.all(promises)
-        .then(() => {setDisable(false);props.onHide();setAddr();setFiles([]);setProgress(0);setProperty();})
+        .then(() => {setDisable(false);props.setUpdater(true);props.onHide();setAddr("");setFiles([]);setProgress(0);setProperty("");})
         .catch(err => console.log(err.code));
         
  }

@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
   
-const SideDrawer=()=>{
+const SideDrawer=(props)=>{
   const classes = useStyles();
 
   const [modalShow,setModalShow]=useState(false);
@@ -67,10 +67,10 @@ const SideDrawer=()=>{
           paper: classes.drawerPaper,
         }}
       >
-        <Upload show={modalShow} onHide={() => setModalShow(false)}/>
+        <Upload show={modalShow} setUpdater={props.setUpdater} onHide={() => setModalShow(false)}/>
           <Edit_Profile show={edit} onHide={() => editProfile(false)} />
           <Change_Password show={editpwd} onHide={() => changepwd(false)}/>
-          <AddClientRecord show={addclient} onHide={() => newaddclient(false)}/>
+          <AddClientRecord clientUpdater={props.clientUpdater} show={addclient} onHide={() => newaddclient(false)}/>
 
         <Toolbar />
 

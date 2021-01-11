@@ -7,11 +7,13 @@ import {generateClients} from '../../firebase';
 const AddClientRecord=(props)=>{
   const [name,newname]=useState('');
   const [phoneno,newphoneno]=useState('');
+  const [disable,setDisable] = useState(false);
 
   const submitter= async ()=>{
-    console.log("adding")
+     setDisable(true)
      await generateClients(name,phoneno);
-     props.onHide();
+     setDisable(false)
+     props.clientUpdater(true)
   }
 
     return(
@@ -20,6 +22,8 @@ const AddClientRecord=(props)=>{
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        backdrop={disable?"static":true}
+        keyboard={disable?"false":"true"}
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
@@ -40,8 +44,8 @@ const AddClientRecord=(props)=>{
                     
         </Modal.Body>
         <Modal.Footer>
-            <Button onClick={submitter}>Submit</Button>
-          <Button onClick={props.onHide} >Cancel</Button>
+            <Button disabled={disable} onClick={submitter}>{disable?"Adding":"Submit"}</Button>
+            <Button disabled={disable} onClick={props.onHide} >Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

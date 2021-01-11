@@ -147,7 +147,7 @@ const ProfilePage=()=> {
 	<Edit_Contact  show={editph} onHide={() => changeph(false)}/>
 	<Edit_Email   show={editemail} onHide={() => changeemail(false)}/>
 	<Edit_Name show={editname}  onHide={() => changename(false)}/>
-    <ImageCropper show={imgcrop} onHide={() => newimgcrop(false)}/>
+    {imgcrop && <ImageCropper show={imgcrop} onHide={() => newimgcrop(false)}/>}
       
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -47,7 +47,8 @@ const useStyles = makeStyles((theme) => ({
 const ClippedDrawer=(props)=> {
   const classes = useStyles();
   console.log("DashBoard")
-
+  const [updater, setUpdater] = useState(false)
+  const [clientUpdate, clientUpdater] = useState(false)
 const signOut = () =>{
   auth.signOut()
 }
@@ -61,12 +62,12 @@ const signOut = () =>{
         <PrimarySearchAppBar dp={props.userData.photo_url} signOut={signOut}></PrimarySearchAppBar>
       </AppBar>
       
-      <SideDrawer></SideDrawer>
+      <SideDrawer setUpdater={setUpdater} clientUpdater={clientUpdater}></SideDrawer>
       <Container component="main" maxWidth="xl">
       <main className={classes.content}>
         <Toolbar />
-        <ClientList />
-        <DataTable></DataTable>
+        <ClientList clientUpdate={clientUpdate} />
+        <DataTable updater={updater} />
       </main>
       </Container>
     </div>
