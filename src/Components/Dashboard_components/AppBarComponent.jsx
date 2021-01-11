@@ -1,13 +1,13 @@
-import React, { useEffect,useState } from 'react';
-import {auth,getUserDocument} from '../../firebase';
-import { fade, makeStyles } from '@material-ui/core/styles';
+import React, {useState } from 'react';
+import {auth} from '../../firebase';
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+//import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Avatar from '@material-ui/core/Avatar';
 import { Link } from 'react-router-dom';
@@ -118,7 +118,7 @@ export default function PrimarySearchAppBar(props) {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="static" className>
+      <AppBar position="static" >
         <Toolbar>
           
           <Typography className={classes.title} variant="h6" noWrap>

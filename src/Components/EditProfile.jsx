@@ -18,7 +18,6 @@ const EditProfile = () => {
     const [isLoading,setLoading] = useState(false); 
     const [emailflag,setEmailflag]=useState(false)
     const [userpass,setUserpass]=useState("")
-    const [newProfile,setNewProfile] = useState();
     let history = useHistory();
 
 
@@ -84,7 +83,7 @@ const EditProfile = () => {
 
      const changeEmail = async() => {
         var user = auth.currentUser;
-        if(Email==user.email){
+        if(Email===user.email){
         Reauthenticate(userpass).then(() => {
           user.updateEmail(newEmail).then(async() => {
             console.log("Email updated!");

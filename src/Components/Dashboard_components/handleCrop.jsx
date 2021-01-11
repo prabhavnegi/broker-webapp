@@ -4,7 +4,10 @@ import "cropperjs/dist/cropper.css";
 import { createRef } from "react";
 
 const HandleCrop = (props) => {
+
+
     const imageElement= createRef()
+
     useEffect(()=>{
         const cropper = new Cropper(imageElement.current, {
             zoomable: false,
@@ -21,7 +24,7 @@ const HandleCrop = (props) => {
 
         })
 
-    },[])
+    },[imageElement,props])
     
     return (
        <div> 

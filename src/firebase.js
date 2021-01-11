@@ -72,51 +72,49 @@ export const emailVerify = async(user) => {
 };
 
 //delete user
-const deleteFolderContents=async(path) => {
+const deleteFolderContents = async(path) => {
     const ref = storage.ref(path);
     ref.listAll()
-      .then(dir => {
-        dir.items.forEach(fileRef => {
-          deleteFile(ref.fullPath, fileRef.name);
-        });
-        dir.prefixes.forEach(folderRef => {
-          deleteFolderContents(folderRef.fullPath);
+        .then(dir => {
+            dir.items.forEach(fileRef => {
+                deleteFile(ref.fullPath, fileRef.name);
+            });
+            dir.prefixes.forEach(folderRef => {
+                deleteFolderContents(folderRef.fullPath);
+            })
         })
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
+        .catch(error => {
+            console.log(error);
+        });
+}
 
-  const deleteFile=(pathToFile, fileName) => {
+const deleteFile = (pathToFile, fileName) => {
     const ref = storage.ref(pathToFile);
     const childRef = ref.child(fileName);
     childRef.delete()
-  }
-  
+}
+
 export const deleteUser = () => {
     var user = auth.currentUser;
     //delete docs
-    try{
+    try {
         var clients = db.collection('users').doc(user.uid).collection('clients')
         clients.get().then((Snapshot) => {
-        Snapshot.forEach((doc) => {
-            doc.ref.delete();
+            Snapshot.forEach((doc) => {
+                doc.ref.delete();
             });
         });
-    }
-    catch{
+    } catch {
         console.log("no clients")
     }
-    try{
+    try {
         var property = db.collection('users').doc(user.uid).collection('property_details')
         property.get().then((Snapshot) => {
-        Snapshot.forEach((doc) => {
-            doc.ref.delete();
+            Snapshot.forEach((doc) => {
+                doc.ref.delete();
             });
         });
-        }
-    catch{
+    } catch {
         console.log("no props")
     }
     //delete stprage
@@ -183,7 +181,7 @@ export const UserCheck = async(user) => {
         if (!snapshot.exists)
             return null
         else
-            return user
+            return snapshot.data()
     }
     //generating property doc
 export const generatePropDocument = async(user, name, address, url) => {
@@ -244,7 +242,7 @@ export const updateUserInfo = async(displayName) => {
     const userRef = firestore.doc(`users/${user.uid}`);
     const snapshot = await userRef.get()
     if (snapshot.data().displayName === displayName)
-        throw "Inputs cannot be same"
+        throw new Error("Inputs cannot be same")
     else
         try {
             await userRef.update({
@@ -259,7 +257,6 @@ export const updateUserInfo = async(displayName) => {
 
 export const updateProfile = async(file, name) => {
     var user = auth.currentUser
-    console.log(name)
     const userRef = firestore.doc(`users/${user.uid}`);
     try {
         await storage.ref(`${user.uid}/ProfileImage/${name}`).put(file)

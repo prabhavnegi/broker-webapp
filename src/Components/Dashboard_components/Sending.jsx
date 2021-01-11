@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
+//import Link from '@material-ui/core/Link';
 import SideDrawer from './sideDrawer';
 import { useForm } from "react-hook-form";
 import SelectClient from './SelectClient';
@@ -50,27 +50,31 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: 'borderbox',
   },
 }));
-var itemList=[];
+//var itemList=[];
 
 const Sending=()=> {
 
-  var flag=1;
-  function Copyright() {
-    return (
-      <Typography variant="body2" color="textSecondary" align="center">
-        {'Copyright © '}
-        <Link color="inherit" href="/">
-          Broker.com
-        </Link>{' '}
-        {new Date().getFullYear()}
-        {'.'}
-      </Typography>
-    );
-  }
+  //var flag=1;
+
   
-  const [modalShow,setModalShow]=useState(false);
-  const [edit,editProfile]=useState(false);
-  const [editpwd,changepwd]=useState(false);
+   /* function Copyright() {
+      return (
+        <Typography variant="body2" color="textSecondary" align="center">
+          {'Copyright © '}
+          <Link color="inherit" href="/">
+            Broker.com
+          </Link>{' '}
+          {new Date().getFullYear()}
+          {'.'}
+        </Typography>
+      );
+    }  */
+  
+  //const [modalShow,setModalShow]=useState(false);
+  //const [edit,editProfile]=useState(false);
+  //const [editpwd,changepwd]=useState(false);
+
+  
   const [showClient,newshowclient]=useState(false);
   const [showProperty,newshowProperty]=useState(false);
   const classes = useStyles();

@@ -1,7 +1,6 @@
-import React,{useState,useEffect}from "react";
+import React,{useEffect,createRef}from "react";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.min.css";
-import { createRef } from "react";
 
 const HandleCrop = (props) => {
     const imageElement= createRef()
@@ -21,7 +20,7 @@ const HandleCrop = (props) => {
 
         })
 
-    },[])
+    },[props,imageElement])
     
     return (
        <div> 

@@ -9,7 +9,6 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
-import Typography from '@material-ui/core/Typography';
 import { Divider } from "@material-ui/core";
 
 const useStyles = makeStyles({
@@ -45,6 +44,7 @@ const getClients =  async () => {
     const user = auth.currentUser;
     const userRef = firestore.collection('users');
     const client=await userRef.doc(user.uid).collection('clients').doc(user.uid+"clients").get()
+    console.log("clientList")
     if(client.data())
     {
       setData(client.data())

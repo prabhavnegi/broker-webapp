@@ -1,18 +1,17 @@
-import React,{useState,useEffect} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 /* import EnhancedTableToolbar from './ClientList2'; */
 import SideDrawer from './sideDrawer';
 import PrimarySearchAppBar from './AppBarComponent';
 import Container from '@material-ui/core/Container';
 import ClientList from './ClientList';
 //backend imports
-import {auth,firestore,getUserDocument} from "../../firebase";
+import {auth} from "../../firebase";
 import DataTable from './PropertyList';
-
+//import {UserContext} from "../../UserProvider/provider";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -43,42 +42,15 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
 }));
-var itemList=[];
 
-const ClippedDrawer=()=> {
+
+const ClippedDrawer=(props)=> {
   const classes = useStyles();
-  const [flag,setFlag]=useState(false);
-  
-  const [user,setUser] = useState({})
-const [docs,setDocs] = useState([])
-const [hidden,setHidden] = useState({})
+  console.log("DashBoard")
 
 const signOut = () =>{
   auth.signOut()
 }
-
-useEffect( () => {
-  getUser()
-  },[]) 
-
-const getUser =  async () => {
-  const user = auth.currentUser
-   const userDoc=await getUserDocument(user.uid)
-  setUser(userDoc)
-  const userRef = firestore.collection('users');
-  const properties =  await userRef.doc(`${user.uid}`).collection('property_details').get()
-  if(properties.docs.length)
-  {
-    setFlag(true);
-    properties.docs.forEach(p => {
-      const z = p.data()
-      setHidden(hidden=>({...hidden,[z.name]:false}))
-      setDocs(docs=>[...docs,z])
-    })
-  }
-}
-
-
 
   return (
     <div className={classes.root}>
@@ -86,14 +58,13 @@ const getUser =  async () => {
       
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
-        <PrimarySearchAppBar dp={user.photo_url} signOut={signOut}></PrimarySearchAppBar>
+        <PrimarySearchAppBar dp={props.userData.photo_url} signOut={signOut}></PrimarySearchAppBar>
       </AppBar>
       
       <SideDrawer></SideDrawer>
       <Container component="main" maxWidth="xl">
       <main className={classes.content}>
         <Toolbar />
-        {!flag ? <h1>No properties present. To upload click on Upload Folder</h1>:""}
         <ClientList />
         <DataTable></DataTable>
       </main>

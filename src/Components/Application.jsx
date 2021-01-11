@@ -41,7 +41,7 @@ function App() {
               <Route path="/EditProfile/updateProfile" exact component={ImmageCropper}/>
               <Route path="/Sending" exact component={Sending} />
               <Route path="/dash" render={props=>{
-                return isLoading?"":userData?<ClippedDrawer {...props}/> : <Redirect to="/"/>
+                return isLoading?"":userData?<ClippedDrawer userData={userData} {...props}/> : <Redirect to="/"/>
               }}/>
               <Route path="/signUp" render={props=>{
                 return isLoading?"hello":userData?<Redirect to="/" {...props}/> : <SignUp/>

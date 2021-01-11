@@ -1,6 +1,5 @@
 import React, { useEffect,useState } from "react";
-import { useHistory } from "react-router";
-import {auth,firestore,getUserDocument,storageDel} from '../../firebase';
+import {auth,firestore,storageDel} from '../../firebase';
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import  TableBody from "@material-ui/core/TableBody";
@@ -10,7 +9,6 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
-import { Divider } from "@material-ui/core";
 import EditPropertyList from './EditPropertyList';
 import ViewProperty from './ViewProperty';
 
@@ -36,32 +34,29 @@ const DataTable=()=> {
 
     const [docs,setDocs]=useState([]);
     const [flag,setFlag]=useState();
-    const [user,setUser]=useState();
     const [pName,setPName]=useState();
-    const [propDetails,setPropDetails] = useState({name:"",address:"",URL:[]})
+    const [propdetails,setPropDetails] = useState()
     const [editDetails, showeditDetails] = useState(false);
     const [showImage,newshowImage] = useState(false);
-    const history=useHistory();
 
     const selected=new Set();
     
     useEffect(()=>{
         getProps();
-    },[user])
+    },[])
 
 const getProps =  async () => {
     const user = auth.currentUser
-     const userDoc=await getUserDocument(user.uid)
-    setUser(userDoc)
     const userRef = firestore.collection('users');
     const properties =  await userRef.doc(`${user.uid}`).collection('property_details').get()
     if(properties.docs.length)
       {
         var arr=[];
-        properties.docs.map(p => {
-          const z = p.data()
-          arr=[...arr,z];
-        })
+        properties.docs.map( p => {
+            const z = p.data();
+            arr = [...arr, z];
+            return ""
+          })
         setDocs(docs=>arr)
         setFlag(true)
       }
@@ -72,7 +67,6 @@ const getProps =  async () => {
   }
 
   const checkboxChange=(e)=>{
-    console.log(e.currentTarget.checked)
     if(e.currentTarget.checked)
         selected.add(e.currentTarget.value);
     else
@@ -113,8 +107,9 @@ const getProps =  async () => {
 }
 
     return (
-      <Paper className={classes.root}>
-          {flag?
+      <div>
+      {flag?
+      <Paper className={classes.root}>  
         <Table className={classes.table}>
             <TableHead>
             <TableRow>
@@ -133,18 +128,14 @@ const getProps =  async () => {
             </TableRow>
             </TableHead>
           <TableHead>
-          <Divider />
-          <EditPropertyList show={editDetails} getProps={getProps} pName={pName} onHide={()=>showeditDetails(false)}/>
-          <ViewProperty show={showImage}  propDetails={propDetails} onHide={()=>newshowImage(false)}></ViewProperty>
-            <TableRow checkboxselection>
+          <EditPropertyList show={editDetails} getProps={getProps} pName={pName} onHide={()=>{showeditDetails(false)}}/>
+          {propdetails &&<ViewProperty show={showImage}  propdetails={propdetails} onHide={()=>{newshowImage(false);setPropDetails(null)}}></ViewProperty>}
+            <TableRow checkboxselection="True">
               <TableCell><Checkbox value="selectall" onChange={selectallBox} style={{marginLeft: "25px",marginTop: "10px"}}></Checkbox></TableCell>
               <TableCell>Property Name</TableCell>
               <TableCell>Address</TableCell>
               <TableCell>Actions</TableCell>
-              
             </TableRow>
-
-            
           </TableHead>
           <TableBody>
             {docs.map((c,index) => {
@@ -176,8 +167,10 @@ const getProps =  async () => {
               );
             })}
           </TableBody>
-        </Table>:""}
+        </Table>
       </Paper>
+      :<h1>"No properties present. To upload click on Upload Folder"</h1>}
+      </div>
     );
   }
 

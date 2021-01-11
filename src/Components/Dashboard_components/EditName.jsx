@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, {useState} from 'react';
 import {Modal,Button} from 'react-bootstrap';
 import {Form} from 'react-bootstrap';
 import {updateUserInfo} from '../../firebase';

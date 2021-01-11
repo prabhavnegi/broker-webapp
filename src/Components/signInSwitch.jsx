@@ -9,9 +9,10 @@ const SignInSwitch = () => {
     const history=useHistory();
     
     useEffect(() => {
+        
     console.log("switched to / ")
      history.push("/")
-    },[])
+    },[history])
 
     return (
         <div>

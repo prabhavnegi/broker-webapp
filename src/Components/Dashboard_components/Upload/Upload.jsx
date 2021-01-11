@@ -11,6 +11,7 @@ const Upload= (props) => {
   const [progress,setProgress] = useState(0);
   const [property,setProperty] = useState(props.pName);
   const [addr,setAddr]=useState(props.pAddr);
+  const [disable,setDisable] = useState(false)
   const [files, setFiles] = useState([])
 
   const user = auth.currentUser
@@ -32,7 +33,11 @@ const Upload= (props) => {
 };
 
 const handleUpload = e => {
-  e.preventDefault(); // prevent page refreshing
+    if (!files.length)
+      props.onHide()
+    e.preventDefault(); // prevent page refreshing
+    setDisable(true)
+    
     const promises = []
     files.forEach(file => {
      const uploadTask = storage.ref(`${user.uid}/${property}/${file.name}`).put(file);
@@ -64,13 +69,12 @@ const handleUpload = e => {
              );
            });
        Promise.all(promises)
-        .then(() => {alert('All files uploaded');props.getUser();props.onHide();setAddr();setFiles([]);setProgress(0);setProperty();})
+        .then(() => {setDisable(false);props.onHide();setAddr();setFiles([]);setProgress(0);setProperty();})
         .catch(err => console.log(err.code));
         
  }
 
   const updateDoc= (url) => {
-    console.log(url);
      generatePropDocument(user,property,addr,url);
      
   }
@@ -89,6 +93,8 @@ const handleUpload = e => {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        backdrop={disable?"static":true}
+        keyboard = {disable?"false":"true"}
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
@@ -123,8 +129,8 @@ const handleUpload = e => {
                 <progress value={progress} max="100" className="progress" />
                 </div>
           <Row noGutters style={{padding:"20px 0"}}>
-                {files && files.map(file=>(
-                    <Col xs={3} style={{padding:"10px",position:"relative"}}>
+                {files && files.map((file,i)=>(
+                    <Col key={i} xs={3} style={{padding:"10px",position:"relative"}}>
                       <div  className="imgCard" style={{overflow:"hidden",height:"96.5px"}}>
                         <Image className="img" fluid style={{minHeight:"100%",objectFit:"cover"}} onClick={()=>delImageHandler(file)} rounded src={URL.createObjectURL(file)}/>
                       </div>
@@ -133,8 +139,8 @@ const handleUpload = e => {
                 </Row>
         </Modal.Body>
         <Modal.Footer>
-            <Button onClick={handleUpload} >Submit</Button>
-          <Button onClick={()=>{setFiles([])}} >Close</Button>
+            <Button disabled={disable} onClick={handleUpload} >{disable?"Uploading":"Upload"}</Button>
+          <Button disabled={disable} onClick={()=>{setFiles([]);props.onHide()}} >Close</Button>
         </Modal.Footer>
       </Modal>
          

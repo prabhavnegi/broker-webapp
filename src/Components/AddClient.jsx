@@ -1,7 +1,6 @@
-import React,{useEffect, useState} from 'react';
-import {generateClients,auth,firestore,FieldValue} from '../firebase';
+import React,{useState} from 'react';
+import {generateClients,auth,firestore} from '../firebase';
 import { useHistory } from 'react-router';
-import {Link} from "react-router-dom";
 
 const AddClient=(props) => {
     const [name,newname]=useState('');
@@ -177,7 +176,7 @@ const AddClient=(props) => {
         docs.map(p =>(  
             <div key={p.name}>
                 <input type="checkbox" name="prop" value={p.name} onChange={PropboxChange}/><label>Property Name: {p.name}</label>
-                <img src={p.URL[0]} style={{height:"100px",width:"100px"}}/>
+                <img src={p.URL[0]} alt="" style={{height:"100px",width:"100px"}}/>
             </div>
             ))
         }

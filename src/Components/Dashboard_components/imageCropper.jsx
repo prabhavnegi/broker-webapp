@@ -17,7 +17,6 @@ const ImageCropper = (props) => {
         }
 
         const handleUpload = () => {
-          console.log(cropImg)
           if(!image)
             props.onHide();
           setDisable(true)

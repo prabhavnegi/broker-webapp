@@ -9,7 +9,7 @@ import {Container,Row,Col,Form,Button,Card} from 'react-bootstrap'
 import {Formik, Field, ErrorMessage} from 'formik';
 import * as Yup from 'yup';
 
-const phoneRegExp = /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/
+const phoneRegExp = /^(\+91[\\-\s]?)?[0]?(91)?[789]\d{9}$/
 
 const mySchema=Yup.object().shape({
   username: Yup.string()
@@ -28,7 +28,7 @@ const SignUp = () => {
   
 
   
-  const [error, setError] = useState(null);
+  //const [error, setError] = useState(null);
   const [flag,setFlag] = useState(true)
   const {userData,loading} = useContext(UserContext)
   let history = useHistory();
@@ -52,7 +52,8 @@ const SignUp = () => {
 
     }
     catch(error){
-      setError('Error Signing up with email and password');
+      //setError('Error Signing up with email and password');
+      console.log("Error Signing up with email and password")
     }
       
   };

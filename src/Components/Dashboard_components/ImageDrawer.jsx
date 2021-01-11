@@ -1,5 +1,4 @@
-import React,{useEffect, useState} from 'react';
-import {auth,getUserDocument} from '../../firebase';
+import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Toolbar from '@material-ui/core/Toolbar';

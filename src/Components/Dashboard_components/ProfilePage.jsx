@@ -4,7 +4,7 @@ import ImageDrawer from './ImageDrawer';
 import PrimarySearchAppBar from './AppBarComponent';
 import { useForm } from "react-hook-form";
 import {Link} from 'react-router-dom';
-import { CssBaseline,AppBar,Typography, Card, CardActions, CardContent,Divider, Button, Grid,Box, TextField,Container } from '@material-ui/core';
+import { CssBaseline,AppBar,Typography, Card,Button, Grid,Container } from '@material-ui/core';
 import Change_Password from './ChangePassword';
 import Edit_Contact from './EditContact';
 import Edit_Email from './EditEmail';
@@ -114,7 +114,6 @@ const ProfilePage=()=> {
 	},[])
 
 
-  var flag=1;
   function Copyright() {
     return (
       <Typography variant="body2" color="textSecondary" align="center" >
@@ -135,8 +134,6 @@ const ProfilePage=()=> {
   const [editph,changeph]=useState(false);
   const [editemail,changeemail]=useState(false);
   const [editname,changename]=useState(false);
-
-
   const [imgcrop,newimgcrop]=useState(false);
 
   useEffect(()=>{
@@ -146,11 +143,11 @@ const ProfilePage=()=> {
   return (
     loading?"":
     <div className={classes.root}>
-	<Change_Password getUser={getUser} show={editpwd} onHide={() => changepwd(false)}/>
-	<Edit_Contact getUser={getUser} show={editph} onHide={() => changeph(false)}/>
-	<Edit_Email  getUser={getUser} show={editemail} onHide={() => changeemail(false)}/>
-	<Edit_Name getUser={getUser} show={editname}  onHide={() => changename(false)}/>
-    <ImageCropper getUser={getUser} show={imgcrop} onHide={() => newimgcrop(false)}/>
+	<Change_Password  show={editpwd} onHide={() => changepwd(false)}/>
+	<Edit_Contact  show={editph} onHide={() => changeph(false)}/>
+	<Edit_Email   show={editemail} onHide={() => changeemail(false)}/>
+	<Edit_Name show={editname}  onHide={() => changename(false)}/>
+    <ImageCropper show={imgcrop} onHide={() => newimgcrop(false)}/>
       
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
@@ -161,7 +158,7 @@ const ProfilePage=()=> {
       <main className={classes.content}>
 	  <Container component="main" maxWidth="md">
 		<div className={classes.toolbar} />
-            <Card className={classes.card} maxWidth="xs">
+            <Card className={classes.card} maxwidth="xs">
             <div className={classes.paper}>
 				<div className="card" style={{paddingLeft: "10px",paddingRight: "10px"}}>
 				<div className="card-block">
@@ -190,7 +187,7 @@ const ProfilePage=()=> {
 								variant="contained"
 								onClick={() => changename(true)}
 								>
-								Edit Your Name
+									Edit Your Name
 								</Button>
 							</Grid>
 							

@@ -10,8 +10,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
 import FolderIcon from '@material-ui/icons/Folder';
-
-import Sending from './Sending';
 import { Link } from 'react-router-dom';
 import Upload from '../Dashboard_components/Upload/Upload';
 import Edit_Profile from './EditProfile';
@@ -79,9 +77,9 @@ const SideDrawer=()=>{
         <div className={classes.drawerContainer}>
             <List>
           
-             <ListItem button key={'Upload Folder'} onClick={()=>setModalShow(true)}>
+             <ListItem button key={'New Property'} onClick={()=>setModalShow(true)}>
                 <ListItemIcon ><FolderIcon /></ListItemIcon>
-                <ListItemText primary={'Upload Folder'}/>
+                <ListItemText primary={'New Property'}/>
               </ListItem>
               <ListItem button key={'Send Property'} component={Link} to="/Sending" >
                 <ListItemIcon><FolderIcon /> </ListItemIcon>
