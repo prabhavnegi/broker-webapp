@@ -171,7 +171,8 @@ const getProps =  async () => {
           </TableBody>
         </Table>
       </Paper>
-      :<h1>"No properties present. To upload click on Upload Folder"</h1>}
+      :<div style={{marginTop:"4%",marginBottom:"4%",padding:"15px",backgroundColor:"white",borderRadius:"5px",boxShadow:"3px 3px 5px rgba(0, 0, 0, 0.4)"}}>
+        <h3 style={{ fontFamily:"Roboto",margin:"0",textAlign:"center"}}>No properties present.</h3></div>}
       </div>
     );
   }

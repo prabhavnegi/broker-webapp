@@ -139,7 +139,7 @@ const getClients =  async () => {
         </Table>
       </Paper>
       : <div style={{marginTop:"4%",marginBottom:"4%",padding:"15px",backgroundColor:"white",borderRadius:"5px",boxShadow:"3px 3px 5px rgba(0, 0, 0, 0.4)"}}>
-        <h3 style={{ margin:"0",textAlign:"center"}}>No clients to show</h3></div>}
+        <h3 style={{ fontFamily:"Roboto",margin:"0",textAlign:"center"}}>No clients to show</h3></div>}
       </div>
     );
   }

@@ -51,7 +51,7 @@ const ImageCropper = (props) => {
         backdrop={true}
         keyboard = {disable?"false":"true"}
       >
-        <Modal.Header>
+        <Modal.Header closeButton>
           <Modal.Title>Upload Image</Modal.Title>
         </Modal.Header>
         <br/>

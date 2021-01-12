@@ -37,7 +37,8 @@ function App() {
               <Route path="/EditProp/:id" component={EditProp}/>
               <Route path="/Pdf" exact component={Pdf}/>
               <Route path="/homepage" exact component={HomePage}/>
-              <Route path="/EditProfile/updateProfile" exact component={ImmageCropper}/>
+              {/*<Route path="/EditProfile/updateProfile" exact component={ImmageCropper}/>*/}
+
               <Route path="/Sending" exact component={Sending} />
               <Route path="/dash" render={props=>{
                 return isLoading?"":userData?<ClippedDrawer userData={userData} {...props}/> : <Redirect to="/"/>
@@ -45,13 +46,17 @@ function App() {
               <Route path="/signUp" render={props=>{
                 return isLoading?"hello":userData?<Redirect to="/" {...props}/> : <SignUp/>
               }}/>
-              <Route path="/EditProfile" render={props=>{
-                return isLoading?"":userData?<EditProfile {...props}/> : <Redirect to="/"/>
-              }}/>
+
+              {/*
+                <Route path="/EditProfile" render={props=>{
+                  return isLoading?"":userData?<EditProfile {...props}/> : <Redirect to="/"/>
+                }}/>
+              */}
 
               <Route path="/" render={props=>{
                 return isLoading?"loading":userData?<ProfilePage {...props}/> : <SignIn/>
               }}/>
+
             </Switch>
           </div>
         </Router>
