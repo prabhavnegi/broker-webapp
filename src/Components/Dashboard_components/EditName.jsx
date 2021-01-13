@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Modal,Button} from 'react-bootstrap';
 import {Form} from 'react-bootstrap';
 import {updateUserInfo} from '../../firebase';
@@ -23,31 +23,42 @@ const Edit_Name=(props)=>{
     const [name,setName]=useState();
     const [error,setError]=useState();
     const [success,setSuccess]=useState();
+    const [disable,setDisable]=useState(false);
 
     const handleChange=(e)=>{
       setName(e.target.value)
     }
 
     const handleSubmit=async ()=>{
+      setDisable(true)
       try{
           await updateUserInfo(name);
+          setDisable(false)
           setSuccess("Name updated")
       } catch(error){
         setError("Inputs cannot be same")
         return;
       }
-      props.onHide()
       setSuccess("Name updated")
-       
+      props.onHide();
     }
 
+    useEffect(()=>{
+      return () =>{
+        setName()
+      }
+    },[])
+
     const classes=useStyles();
+
     return(
         <Modal
         {...props}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        backdrop={disable?"static":true}
+        keyboard={disable?"false":"true"}
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
@@ -75,8 +86,8 @@ const Edit_Name=(props)=>{
                     
         </Modal.Body>
         <Modal.Footer>
-            <Button onClick={handleSubmit} >Save</Button>
-          <Button onClick={props.onHide} >Cancel</Button>
+            <Button disabled={disable} onClick={handleSubmit} >{disable?"Updating":"Submit"}</Button>
+          <Button disabled={disable} onClick={props.onHide} >Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

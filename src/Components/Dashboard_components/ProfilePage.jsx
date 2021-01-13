@@ -7,7 +7,6 @@ import {Link} from 'react-router-dom';
 import { CssBaseline,AppBar,Typography, Card,Button, Grid,Container } from '@material-ui/core';
 import Change_Password from './ChangePassword';
 import Edit_Contact from './EditContact';
-import Edit_Email from './EditEmail';
 import Edit_Name from './EditName';
 import ImageCropper from './imageCropper';
 import {auth,getUserDocument} from '../../firebase';
@@ -132,21 +131,19 @@ const ProfilePage=()=> {
   const onSubmit = values => {};
   const [editpwd,changepwd]=useState(false);
   const [editph,changeph]=useState(false);
-  const [editemail,changeemail]=useState(false);
   const [editname,changename]=useState(false);
   const [imgcrop,newimgcrop]=useState(false);
 
   useEffect(()=>{
 	  getUser()
-  },[editname,editemail,editph,editpwd,imgcrop])
+  },[editname,editph,editpwd,imgcrop])
 
   return (
     loading?"":
     <div className={classes.root}>
-	<Change_Password  show={editpwd} onHide={() => changepwd(false)}/>
-	<Edit_Contact  show={editph} onHide={() => changeph(false)}/>
-	<Edit_Email   show={editemail} onHide={() => changeemail(false)}/>
-	<Edit_Name show={editname}  onHide={() => changename(false)}/>
+	{editpwd && <Change_Password  show={editpwd} onHide={() => changepwd(false)}/>}
+	{editph && <Edit_Contact  show={editph} onHide={() => changeph(false)}/>}
+	{editname && <Edit_Name show={editname}  onHide={() => changename(false)}/>}
     {imgcrop && <ImageCropper show={imgcrop} onHide={() => newimgcrop(false)}/>}
       
       <CssBaseline />
@@ -191,16 +188,7 @@ const ProfilePage=()=> {
 								</Button>
 							</Grid>
 							
-							<Grid item xs={12}>
-								<Button 
-								variant="outlined"
-								type="submit"
-								fullWidth
-								variant="contained"
-								onClick={() => changeemail(true)}
-								>Edit Your Email Id
-								</Button>    
-							</Grid>
+		
 							<Grid item xs={12}>
 								<Button 
 								variant="outlined"

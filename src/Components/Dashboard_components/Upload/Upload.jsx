@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {storage, generatePropDocument,auth} from "../../../firebase";
 import {useState} from 'react';
 import {Modal,Button,Form,Image,Row,Col} from 'react-bootstrap';
@@ -69,7 +69,7 @@ const handleUpload = e => {
              );
            });
        Promise.all(promises)
-        .then(() => {setDisable(false);props.setUpdater(true);props.onHide();setAddr("");setFiles([]);setProgress(0);setProperty("");})
+        .then(() => {setDisable(false)})
         .catch(err => console.log(err.code));
         
  }
@@ -83,8 +83,24 @@ const handleUpload = e => {
     console.log(file)
      const arr = files.filter(item => item !== file)
      setFiles(arr)
+  }
 
- }
+  useEffect(()=>{
+    return ()=>{
+      console.log(files.length)
+      if(files.length)
+      {
+        console.log("uploaded")
+        props.setUpdater(true)
+        setAddr("");
+        setFiles([]);
+        setProgress(0);
+        setProperty("");
+      }
+      else
+        console.log("upload closed")
+    }
+  },[])
 
 
     return (
@@ -140,7 +156,7 @@ const handleUpload = e => {
         </Modal.Body>
         <Modal.Footer>
             <Button disabled={disable} onClick={handleUpload} >{disable?"Uploading":"Upload"}</Button>
-          <Button disabled={disable} onClick={()=>{setFiles([]);props.onHide()}} >Close</Button>
+          <Button disabled={disable} onClick={()=>{props.onHide()}} >Close</Button>
         </Modal.Footer>
       </Modal>
          

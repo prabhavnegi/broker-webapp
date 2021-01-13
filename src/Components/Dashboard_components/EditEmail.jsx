@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import {Modal,Button} from 'react-bootstrap';
 import {auth,Reauthenticate,firestore} from '../../firebase';
 import Alert from '@material-ui/lab/Alert';
@@ -24,6 +24,7 @@ const Edit_Email=(props)=>{
   const [password, setPassword] = useState();
   const [error,setError]=useState();
   const [success,setSuccess]=useState();
+  const [disable,setDisable]=useState(false);
 
   const onChangeHandler = e => {
     if (e.target.name === "currentEmail")
@@ -35,6 +36,7 @@ const Edit_Email=(props)=>{
   }
 
   const changeEmail = async() => {
+    setDisable(true)
     const user = auth.currentUser;
     console.log(email)
     if(email===user.email){
@@ -44,8 +46,10 @@ const Edit_Email=(props)=>{
         const userRef= await firestore.collection('users').doc(user.uid)
         await userRef.update({email: newEmail}).then(()=> {
         console.log("doc updated");
+        setDisable(false)
         setSuccess("Email Updated")
         setError("")
+        props.onHide();
       })
     .catch((e)=>console.log(e.message))
       }).catch((error) => { console.log(error); });
@@ -59,6 +63,13 @@ const Edit_Email=(props)=>{
         setError("Current email does not match")
     }
   }
+
+  useEffect(()=>{
+    return ()=> {
+      setNewemail();
+    }
+  })
+
   const classes = useStyles();
     return(
         <Modal
@@ -66,6 +77,8 @@ const Edit_Email=(props)=>{
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        backdrop={disable?"static":true}
+        keyboard={disable?"false":"true"}
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
@@ -100,8 +113,8 @@ const Edit_Email=(props)=>{
                     
         </Modal.Body>
         <Modal.Footer>
-            <Button type="submit" onClick={changeEmail} >Confirm</Button>
-          <Button onClick={props.onHide} >Cancel</Button>
+            <Button disabled={disable} type="submit" onClick={changeEmail} >{disable?"Updating":"Confirm"}</Button>
+          <Button disbaled={disable} onClick={props.onHide} >Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

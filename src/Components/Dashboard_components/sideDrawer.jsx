@@ -67,10 +67,10 @@ const SideDrawer=(props)=>{
           paper: classes.drawerPaper,
         }}
       >
-        <Upload show={modalShow} setUpdater={props.setUpdater} onHide={() => setModalShow(false)}/>
+          {modalShow && <Upload show={modalShow} setUpdater={props.setUpdater} onHide={() => setModalShow(false)}/>}
           <Edit_Profile show={edit} onHide={() => editProfile(false)} />
           <Change_Password show={editpwd} onHide={() => changepwd(false)}/>
-          <AddClientRecord clientUpdater={props.clientUpdater} show={addclient} onHide={() => newaddclient(false)}/>
+          {addclient &&<AddClientRecord clientUpdater={props.clientUpdater} show={addclient} onHide={() => newaddclient(false)}/>}
 
         <Toolbar />
 

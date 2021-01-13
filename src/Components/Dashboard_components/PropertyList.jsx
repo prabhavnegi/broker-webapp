@@ -64,7 +64,6 @@ const getProps =  async () => {
       }
       else{
         setFlag(false)
-        alert("No properties")
       }
   }
 
@@ -130,7 +129,7 @@ const getProps =  async () => {
             </TableRow>
             </TableHead>
           <TableHead>
-          <EditPropertyList show={editDetails} getProps={getProps} pName={pName} onHide={()=>{showeditDetails(false)}}/>
+          {editDetails && <EditPropertyList show={editDetails} getProps={getProps} pName={pName} onHide={()=>{showeditDetails(false)}}/>}
           {propdetails &&<ViewProperty show={showImage}  propdetails={propdetails} onHide={()=>{newshowImage(false);setPropDetails(null)}}></ViewProperty>}
             <TableRow checkboxselection="True">
               <TableCell><Checkbox value="selectall" onChange={selectallBox} style={{marginLeft: "25px",marginTop: "10px"}}></Checkbox></TableCell>

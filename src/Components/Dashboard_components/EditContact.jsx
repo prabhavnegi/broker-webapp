@@ -23,6 +23,7 @@ const Edit_Contact=(props)=>{
   const [newphno,setNewphno]=useState();
   const [error,setError]=useState();
   const [success,setSuccess]=useState();
+  const [disable,setDisable]=useState();
 
   const changeHandler=(e)=>{
     if(e.target.name === 'newPhno')
@@ -30,6 +31,7 @@ const Edit_Contact=(props)=>{
   }
 
   const handleSubmit=async()=>{
+    setDisable(true)
       var user = auth.currentUser;
       const userRef = firestore.doc(`users/${user.uid}`);
       const snapshot = await userRef.get()
@@ -46,7 +48,10 @@ const Edit_Contact=(props)=>{
           return;
       }
       setSuccess("Contact No. Updated");
+      setDisable(false);
   }
+
+
   const classes = useStyles();
     return(
         <Modal
@@ -54,6 +59,8 @@ const Edit_Contact=(props)=>{
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        backdrop={disable?"static":true}
+        keyboard={disable?"false":"true"}
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
@@ -79,8 +86,8 @@ const Edit_Contact=(props)=>{
           </Form>       
         </Modal.Body>
         <Modal.Footer>
-            <Button onClick={handleSubmit}>Save Changes</Button>
-          <Button onClick={props.onHide} >Cancel</Button>
+            <Button disabled={disable} onClick={handleSubmit}>{disable?"Updating":"Save Changes"}</Button>
+          <Button disabled={disable} onClick={props.onHide} >Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

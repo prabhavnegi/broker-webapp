@@ -9,6 +9,7 @@ const ViewProperty=(props)=>{
     const [pAddr,setAddr]=useState()
     const [uploadImg,showuploadImg] = useState(false);
     const [ImgURL,setImgURL] = useState([]);
+    const [disable,setDisable]=useState(false)
 
     console.log(props.propdetails)
             
@@ -26,6 +27,8 @@ const ViewProperty=(props)=>{
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        backdrop={disable?"static":true}
+        keyboard = {disable?"false":"true"}
       >
         <Upload show={uploadImg} pName={props.pName} pAddr={pAddr}  onHide={()=>{showuploadImg(false)}}></Upload>
         <Modal.Header closeButton>
@@ -39,7 +42,7 @@ const ViewProperty=(props)=>{
                     <h1>Property Name: {props.propdetails.name}</h1>      
                 </Row>
                 <Row>
-                    <button style={{marginBottom:"3%"}} onClick={()=> {showuploadImg(true);setAddr(props.propdetails.address)}}>Add Image</button>
+                    <button style={{marginBottom:"3%"}} onClick={()=> {showuploadImg(true);setAddr(props.propdetails.address);setDisable(true)}}>Add Image</button>
                 </Row>
                 <Row className="justify-content-md-center">
                        <Col lg={10} md={10}>
@@ -53,7 +56,7 @@ const ViewProperty=(props)=>{
               </Container>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={props.onHide}>Cancel</Button>
+          <Button onClick={props.onHide}>Close</Button>
         </Modal.Footer>
       </Modal>
     );

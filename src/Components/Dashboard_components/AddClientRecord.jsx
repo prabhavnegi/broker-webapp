@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import {Modal,Button} from 'react-bootstrap';
 import {Form} from 'react-bootstrap';
 import {generateClients} from '../../firebase';
@@ -14,7 +14,17 @@ const AddClientRecord=(props)=>{
      await generateClients(name,phoneno);
      setDisable(false)
      props.clientUpdater(true)
+     props.onHide();
   }
+
+  useEffect(()=> {
+    console.log("add client")
+    return () =>{
+      console.log("close client")
+      newname('');
+      newphoneno('');
+    }
+  },[])
 
     return(
         <Modal

@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import {Modal,Button} from 'react-bootstrap';
 import {Form} from 'react-bootstrap';
 import {updatePassword} from '../../firebase';
@@ -27,6 +27,7 @@ const Change_Password=(props)=>{
   const [Cpassword,setConfirmPassword]=useState();
   const[error,setError]=useState();
   const[success,setSuccess]=useState();
+  const [disable,setDisable]=useState(false);
 
   const onChangeHandler=(e)=>{
     if (e.target.name ==="userPassword")
@@ -38,12 +39,10 @@ const Change_Password=(props)=>{
   }
 
   const changePassword = () => {
+    setDisable(true)
     if(Cpassword===Npassword)
               updatePassword(password,Npassword).then(()=>{
                 setSuccess("password changed successfully")
-                setConfirmPassword("")
-                setNewPassword("")
-                setPassword("")
              }).catch(e=>{
                     console.log(e)
                     setError("Invalid Password")
@@ -53,8 +52,17 @@ const Change_Password=(props)=>{
              setSuccess(false)
             setError("New Password didn't match")
         }
-           
- }
+      }
+
+ useEffect(()=>{
+   return ()=>{
+     console.log("changepwd")
+    setConfirmPassword("")
+    setNewPassword("")
+    setPassword("")
+   }
+ },[])
+
   const classes=useStyles();
     return(
         <Modal
@@ -62,6 +70,8 @@ const Change_Password=(props)=>{
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        backdrop={disable?"static":true}
+        keyboard={disable?"false":"true"}
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
@@ -96,8 +106,8 @@ const Change_Password=(props)=>{
                     
         </Modal.Body>
         <Modal.Footer>
-            <Button onClick={changePassword}>Save Changes</Button>
-          <Button onClick={props.onHide} >Cancel</Button>
+            <Button disabled={disable} onClick={changePassword}>{disable?"Updating":"Save Changes"}</Button>
+          <Button disabled={disable} onClick={props.onHide} >Cancel</Button>
         </Modal.Footer>
       </Modal>
     );
