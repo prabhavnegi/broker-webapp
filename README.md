@@ -4,8 +4,18 @@
 An interactive web app for brokers to easily manage and send multiple property images to their clients. 
 With this, the brokers need not worry about storage as the images and all the details of their client will be stored on Cloud.
  
- **This project is made with React.js with materialUI and bootstrap and Firebase.
- Firebase services used are firestore,storage and authentication.**
+ ## Technologies
+ 
+ ◾ React
+ ◾ React Hooks
+ ◾ Context Api for state management
+ ◾ Bootstap
+ ◾ Material UI
+ ◾ Bootstrap
+ ◾ Firebase auth
+ ◾ Firebase firestore
+ ◾ Firebase storage
+ 
  
  ## FEATURES
  
