@@ -7,13 +7,19 @@ With this, the brokers need not worry about storage as the images and all the de
  ## Technologies
  
  ◾ React
+ 
  ◾ React Hooks
+ 
  ◾ Context Api for state management
- ◾ Bootstap
+ 
+ ◾ React Bootstap
+ 
  ◾ Material UI
- ◾ Bootstrap
+ 
  ◾ Firebase auth
+ 
  ◾ Firebase firestore
+ 
  ◾ Firebase storage
  
  
