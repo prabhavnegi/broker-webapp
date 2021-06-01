@@ -41,7 +41,7 @@ With this, the brokers need not worry about storage as the images and all the de
   
   ✔ Changing user's details (name and contact number)
   
-  ✔ Changing password.
+  ✔ Changing password
   
   ✔ Forget password feature
   
